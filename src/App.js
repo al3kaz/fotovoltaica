@@ -1,10 +1,10 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import HomePage from "./Pages/homePage/homePage";
-import LoginPage from "./components/login/login";
-import Calculator from "./Pages/calculator/calculator";
-import Offers from "./Pages/offers/offers";
-import Database from "./Pages/database/database";
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import HomePage from './Pages/homePage/homePage';
+import LoginPage from './components/login/login';
+import Calculator from './Pages/calculator/calculator';
+import Offers from './Pages/offers/offers';
+import Database from './Pages/database/database';
 
 const App = () => {
   const [login, setLogin] = React.useState(true);

@@ -1,28 +1,51 @@
 {
   "module": [
     {
-      "Producent": "A Solar1",
+      "Producent": "Longi - 375Wp",
       "model": "sf34jklrnlk",
-      "moc": "380Wp",
-      "gwarancja": "12 lat"
+      "moc": "375",
+      "price":"1000"
     },
     {
-      "Producent": "A Solar2",
+      "Producent": "JaSolar - 340Wp",
       "model": "sf34jklrsfsdfsddfnlk",
-      "moc": "400Wp",
-      "gwarancja": "5 lat"
+      "moc": "340",
+      "price":"1100"
     },
     {
-      "Producent": "A Solar3",
+      "Producent": "Seraphim - 340Wp - Full Black - Double Glass",
       "model": "sf34jkrfgfg54ttegrlrnlk",
-      "moc": "250Wp",
-      "gwarancja": "7 lat"
+      "moc": "340",
+      "price":"500"
     },
     {
-      "Producent": "A Solar4",
+      "Producent": "Longi - 445Wp",
       "model": "sf34jkrfgfg54tteasdasdsgrlrnlk",
-      "moc": "250Wp",
-      "gwarancja": "7 lat"
+      "moc": "445",
+      "price":"700"
+    }
+  ],
+  "inverter": [
+    {
+      "Producent": "Fronius",
+      "model": "SYMO 3.0-3-S WLAN",
+      "moc": "3",
+      "price": "1000",
+      "phase": "1"
+    },
+    {
+      "Producent": "Growatt",
+      "model": "3000TL3-S",
+      "moc": "3",
+      "price": "800",
+      "phase": "3"
+    },
+    {
+      "Producent": "Huawei",
+      "model": "SUN 2000-3KTL-M0 ",
+      "moc": "3",
+      "cena": "1200",
+      "phase": "3"
     }
   ]
 }
