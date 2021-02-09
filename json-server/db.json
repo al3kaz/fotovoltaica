@@ -1,0 +1,28 @@
+{
+  "module": [
+    {
+      "Producent": "A Solar1",
+      "model": "sf34jklrnlk",
+      "moc": "380Wp",
+      "gwarancja": "12 lat"
+    },
+    {
+      "Producent": "A Solar2",
+      "model": "sf34jklrsfsdfsddfnlk",
+      "moc": "400Wp",
+      "gwarancja": "5 lat"
+    },
+    {
+      "Producent": "A Solar3",
+      "model": "sf34jkrfgfg54ttegrlrnlk",
+      "moc": "250Wp",
+      "gwarancja": "7 lat"
+    },
+    {
+      "Producent": "A Solar4",
+      "model": "sf34jkrfgfg54tteasdasdsgrlrnlk",
+      "moc": "250Wp",
+      "gwarancja": "7 lat"
+    }
+  ]
+}
