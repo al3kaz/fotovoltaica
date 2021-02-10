@@ -7,40 +7,39 @@ import TotalPrice from '../../components/totalPrice/totalPrice.component';
 
 const Calculator = () => {
   //fetch data
-  const [module, setModule] = React.useState(false);
-  const [inverter, setInverter] = React.useState([]);
-
+  const [components, setComponents] = React.useState(false);
   //input data
   const [requestedPower, setRequestedPower] = React.useState(0);
   const [clientInfo, setClientInfo] = React.useState(0);
-  const [modulePower, setModulePower] = React.useState("")
+  const [modulePower, setModulePower] = React.useState('');
+  const [phase, setPhase] = React.useState('');
+  const [inverterProducent, setInverterProducent] = React.useState('');
+  const [correctInverterModel, setCorrectInverterModel] = React.useState('');
 
   React.useEffect(() => {
     axios
-      .get('http://localhost:3001/module')
+      .get('http://localhost:3001/components')
       .then(function (response) {
         const data = response.data;
-        setModule(data);
+        setComponents(data);
       })
       .catch(function (error) {
         console.log(error);
       });
-    axios
-      .get('http://localhost:3001/inverter')
-      .then(function (response) {
-        const data = response.data;
-        setInverter(data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [])
+  }, []);
 
-  if (!module) return <p>loading...</p>
+  if (!components) return <p>loading...</p>;
 
   const instalationPower = (e) => setRequestedPower(e.target.value);
-  const modulesCount = Math.floor((requestedPower * 1000) / modulePower)
-  const truePower = (modulesCount * modulePower) / 1000
+  const modulesCount = Math.floor((requestedPower * 1000) / modulePower);
+  const truePower = (modulesCount * modulePower) / 1000;
+
+  console.log('żądana moc', requestedPower);
+  console.log('ilość modułów', modulesCount);
+  console.log(clientInfo, '%');
+  console.log(phase, 'fazowy');
+  console.log('inwerter Producent:', inverterProducent);
+  console.log('inwerter cena', correctInverterModel);
 
   return (
     <div
@@ -53,7 +52,7 @@ const Calculator = () => {
           <label className="pe-2">Żądana moc</label>
           <input type="number" onChange={instalationPower} />
         </div>
-        <Modules module={module} setModulePower={setModulePower} />
+        <Modules module={components.module} setModulePower={setModulePower} />
         <p>moc : {truePower}</p>
         <div className="m-2">
           <label className="pe-2">liczba modułów</label>
@@ -64,7 +63,7 @@ const Calculator = () => {
           <select onChange={(e) => setClientInfo(e.target.value)}>
             <option defaultValue selected disabled hidden>
               Rodzaj klienta
-          </option>
+            </option>
             <option value="8">indywidualny 8%</option>
             <option value="23">indywidualny 23%</option>
             <option value="23">firma 23%</option>
@@ -73,7 +72,16 @@ const Calculator = () => {
           </select>
         </div>
       </div>
-      <Inverter inverter={inverter} truePower={truePower} />
+      <Inverter
+        inverter={components.inverter}
+        truePower={truePower}
+        phase={phase}
+        setPhase={setPhase}
+        inverterProducent={inverterProducent}
+        correctInverterModel={correctInverterModel}
+        setInverterProducent={setInverterProducent}
+        setCorrectInverterModel={setCorrectInverterModel}
+      />
       <TotalPrice />
     </div>
   );
