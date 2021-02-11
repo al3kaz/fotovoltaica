@@ -29,13 +29,17 @@ const Modules = ({ module, setModulePower, setTypeofRoof, setModuleIndex }) => {
             setModulePower(e.target.value);
           }}
         >
-          <optgroup label="moduły do wyboru">{showModule}</optgroup>
+          <optgroup label="moduły do wyboru">
+            <option value="" selected disabled hidden />
+            {showModule}
+          </optgroup>
         </select>
       </div>
       <div className="m-2">
         <label className="pe-2">konstrukcja</label>
         <select onChange={(e) => priceDependingOnRoof(e.target.value)}>
           <optgroup label="rodzaj dachu">
+            <option value="" selected disabled hidden />
             <option value="flat">dach prosty</option>
             <option value="slant">dach skośny</option>
             <option value="ground">grunt</option>

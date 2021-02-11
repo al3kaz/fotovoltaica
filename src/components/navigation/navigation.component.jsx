@@ -1,7 +1,10 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import { auth } from "../../firebase";
+
 
 const Navigation = () => {
+
   return (
     <div className="d-flex flex-column bd-highlight m-3">
       <ul className="nav nav-pills">
@@ -20,7 +23,7 @@ const Navigation = () => {
             Baza Danych
           </NavLink>
         </li>
-        <div>Admin</div>
+        <Link to='/' onClick={() => { auth.signOut() }} >Admin</Link>
       </ul>
     </div>
   );

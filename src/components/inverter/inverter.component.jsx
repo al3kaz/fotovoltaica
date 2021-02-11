@@ -61,7 +61,10 @@ const Inverter = ({
             setInverterProducent(e.target.value);
           }}
         >
-          <optgroup label="Producent">{showInverters}</optgroup>
+          <optgroup label="Producent">
+            <option value="" selected disabled hidden />
+            {showInverters}
+          </optgroup>
         </select>
       </div>
       <div className="m-2">
@@ -69,9 +72,11 @@ const Inverter = ({
         <select
           onChange={(e) => {
             setCorrectInverterModelPrice(e.target.value);
-          }}
-        >
-          <optgroup label="moduły do wyboru">{inverterModelListArr}</optgroup>
+          }}>
+          <optgroup label="moduły do wyboru">
+            <option value="" selected disabled hidden />
+            {inverterModelListArr}
+          </optgroup>
         </select>
       </div>
     </div>

@@ -4,6 +4,7 @@ import Navigation from '../../components/navigation/navigation.component';
 import Modules from '../../components/modules/modules.component';
 import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
+import Spinner from '../../components/spinner/spinner';
 
 const Calculator = () => {
   //fetch data
@@ -33,7 +34,9 @@ const Calculator = () => {
       });
   }, []);
 
-  if (!components) return <p>loading...</p>;
+  if (!components) {
+    return <Spinner />
+  }
 
   const modulePrice = () => {
     if (moduleIndex) return components.module[moduleIndex].price;
@@ -81,6 +84,7 @@ const Calculator = () => {
           <label className="pe-2">rodzaj klienta</label>
           <select onChange={(e) => setClientInfo(e.target.value)}>
             <optgroup label="klient">
+              <option value="" selected disabled hidden />
               <option value="8">indywidualny 8%</option>
               <option value="23">indywidualny 23%</option>
               <option value="23">firma 23%</option>
