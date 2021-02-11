@@ -7,7 +7,7 @@ const Inverter = ({
   setPhase,
   inverterProducent,
   setInverterProducent,
-  setCorrectInverterModel,
+  setCorrectInverterModelPrice,
 }) => {
   const showInverters = inverter.map((item) => {
     return (
@@ -61,23 +61,17 @@ const Inverter = ({
             setInverterProducent(e.target.value);
           }}
         >
-          <option defaultValue selected disabled hidden>
-            producent
-          </option>
-          {showInverters}
+          <optgroup label="Producent">{showInverters}</optgroup>
         </select>
       </div>
       <div className="m-2">
         <label className="pe-2">Model falownika</label>
         <select
           onChange={(e) => {
-            setCorrectInverterModel(e.target.value);
+            setCorrectInverterModelPrice(e.target.value);
           }}
         >
-          <option defaultValue selected disabled hidden>
-            model
-          </option>
-          {inverterModelListArr}
+          <optgroup label="moduły do wyboru">{inverterModelListArr}</optgroup>
         </select>
       </div>
     </div>
