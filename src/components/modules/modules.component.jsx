@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Modules = ({ module, setModulePower, setTypeofRoof, setModuleIndex }) => {
-  const showModule = module.map((item) => {
+const Modules = ({ moduls, setModulePower, setTypeofRoof, setModuleIndex }) => {
+  const showModule = moduls.map((item) => {
     return (
-      <option key={item.model} value={item.moc} price={item.price}>
-        {item.Producent}
+      <option key={item.id} value={item.power} price={item.price}>
+        {item.brand}
       </option>
     );
   });

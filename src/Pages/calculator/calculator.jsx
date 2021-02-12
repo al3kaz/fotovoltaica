@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import Navigation from '../../components/navigation/navigation.component';
@@ -12,7 +11,8 @@ const db = firebase.firestore();
 
 const Calculator = () => {
   //fetch data
-  const [components, setComponents] = React.useState(false);
+  const [moduls, setModuls] = React.useState(false);
+  const [inverters, setInverters] = React.useState(false);
   //input data
   const [requestedPower, setRequestedPower] = React.useState('');
   const [moduleIndex, setModuleIndex] = React.useState('');
@@ -27,33 +27,30 @@ const Calculator = () => {
   const [typeOfRoof, setTypeofRoof] = React.useState('');
 
   React.useEffect(() => {
-    axios
-      .get('http://localhost:3001/components')
-      .then(function (response) {
-        const data = response.data;
-        setComponents(data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    const modulesRef = firebase.firestore().collection('moduls');
+    const modulesRef = db.collection('moduls');
+    const invertersRef = db.collection('inverters');
     modulesRef.get().then((snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+      setModuls(data);
+    });
+    invertersRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setInverters(data);
     });
   }, []);
 
-  if (!components) {
+  if (!inverters) {
     return <Spinner />;
   }
 
   const modulePrice = () => {
-    if (moduleIndex) return components.module[moduleIndex].price;
+    if (moduleIndex) return moduls[moduleIndex].price;
   };
   const instalationPower = (e) => setRequestedPower(e.target.value);
   const modulesCount = Math.floor((requestedPower * 1000) / modulePower);
@@ -61,7 +58,7 @@ const Calculator = () => {
 
   const totalNetPrice = 1;
 
-  console.log('żądana moc', typeof parseInt(requestedPower));
+  console.log('żądana moc', requestedPower);
   console.log('ilość modułów', modulesCount);
   console.log('moc modułu', modulePower);
   console.log('konstrukcja dachu', typeOfRoof);
@@ -84,7 +81,7 @@ const Calculator = () => {
           <label>kWp</label>
         </div>
         <Modules
-          module={components.module}
+          moduls={moduls}
           setModulePower={setModulePower}
           setTypeofRoof={setTypeofRoof}
           setModuleIndex={setModuleIndex}
@@ -109,7 +106,7 @@ const Calculator = () => {
         </div>
       </div>
       <Inverter
-        inverter={components.inverter}
+        inverters={inverters}
         truePower={truePower}
         phase={phase}
         setPhase={setPhase}

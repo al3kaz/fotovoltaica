@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Inverter = ({
-  inverter,
+  inverters,
   truePower,
   phase,
   setPhase,
@@ -9,26 +9,20 @@ const Inverter = ({
   setInverterProducent,
   setCorrectInverterModelPrice,
 }) => {
-  const showInverters = inverter.map((item) => {
+  const allInverters = inverters.map((item) => {
     return (
-      <option key={item.Producent} value={item.Producent}>
-        {item.Producent}
+      <option key={item.id} value={item.brand}>
+        {item.brand}
       </option>
     );
   });
-  let inverterModelListArr;
-  if (inverterProducent) {
-    inverterModelListArr = inverter
-      .filter((item) => item.Producent === inverterProducent)[0]
-      .model.filter((item) => item.phase === phase)
-      .map((item) => {
-        return (
-          <option key={item.model} value={item.price}>
-            {item.model}
-          </option>
-        );
-      });
-  }
+
+  const uniqueInvertersBrand = allInverters
+    .map((e) => e['brand'])
+    .map((e, i, final) => final.indexOf(e) === i && i)
+    .filter((obj) => allInverters[obj])
+    .map((e) => allInverters[e]);
+
   return (
     <div className="d-flex flex-column bd-highlight m-3 ">
       <h3>Informacje o falowniu </h3>
@@ -63,7 +57,7 @@ const Inverter = ({
         >
           <optgroup label="Producent">
             <option value="" selected disabled hidden />
-            {showInverters}
+            {uniqueInvertersBrand}
           </optgroup>
         </select>
       </div>
@@ -72,10 +66,11 @@ const Inverter = ({
         <select
           onChange={(e) => {
             setCorrectInverterModelPrice(e.target.value);
-          }}>
+          }}
+        >
           <optgroup label="moduły do wyboru">
             <option value="" selected disabled hidden />
-            {inverterModelListArr}
+            {/* {inverterModelListArr} */}
           </optgroup>
         </select>
       </div>
