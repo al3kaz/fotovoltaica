@@ -1,10 +1,14 @@
 import React from 'react';
 import axios from 'axios';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import Navigation from '../../components/navigation/navigation.component';
 import Modules from '../../components/modules/modules.component';
 import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
 import Spinner from '../../components/spinner/spinner';
+
+const db = firebase.firestore();
 
 const Calculator = () => {
   //fetch data
@@ -34,8 +38,18 @@ const Calculator = () => {
       });
   }, []);
 
+  React.useEffect(() => {
+    const modulesRef = firebase.firestore().collection('moduls');
+    modulesRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+    });
+  }, []);
+
   if (!components) {
-    return <Spinner />
+    return <Spinner />;
   }
 
   const modulePrice = () => {
