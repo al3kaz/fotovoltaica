@@ -98,8 +98,10 @@ const Calculator = () => {
   }
 
   const modulePrice = () => {
-    if (state.moduleIndex) return moduls[state.moduleIndex].price;
+    if (state.moduleIndex || state.moduleIndex === 0)
+      return moduls[state.moduleIndex].price;
   };
+  console.log(modulePrice());
   const instalationPower = (e) => setRequestedPower(e.target.value);
 
   const modulesCount = Math.floor(
@@ -108,6 +110,7 @@ const Calculator = () => {
   const truePower = (modulesCount * state.modulePower) / 1000;
 
   const totalNetPrice = modulesCount * modulePrice;
+  console.log(typeof modulesCount, typeof modulePrice);
 
   console.log('żądana moc', state.requestedPower);
   console.log('ilość modułów', modulesCount);
