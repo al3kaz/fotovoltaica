@@ -23,6 +23,15 @@ const Inverter = ({
     .filter((obj) => allInverters[obj])
     .map((e) => allInverters[e]);
 
+  const inverterModelPrice = inverters
+    .filter((model) => model.brand === inverterProducent)
+    .map((item) => {
+      return (
+        <option key={item.id} value={item.price}>
+          {item.model}
+        </option>
+      );
+    });
   return (
     <div className="d-flex flex-column bd-highlight m-3 ">
       <h3>Informacje o falowniu </h3>
@@ -70,7 +79,7 @@ const Inverter = ({
         >
           <optgroup label="moduły do wyboru">
             <option value="" selected disabled hidden />
-            {/* {inverterModelListArr} */}
+            {inverterModelPrice}
           </optgroup>
         </select>
       </div>

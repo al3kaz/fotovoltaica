@@ -38,14 +38,14 @@ const Calculator = () => {
   const [inverters, setInverters] = React.useState(false);
 
   const [state, dispatch] = React.useReducer(reducer, {
-    requestedPower: '',
+    requestedPower: 0,
     moduleIndex: '',
-    modulePower: '',
-    clientInfo: '',
-    phase: '',
+    modulePower: 0,
+    clientInfo: 0,
+    phase: 1,
     inverterProducent: '',
-    correctInverterModelPrice: '',
-    typeOfRoof: '',
+    correctInverterModelPrice: 0,
+    typeOfRoof: 0,
   });
 
   const setRequestedPower = (requestedPower) =>
@@ -101,16 +101,18 @@ const Calculator = () => {
     if (state.moduleIndex) return moduls[state.moduleIndex].price;
   };
   const instalationPower = (e) => setRequestedPower(e.target.value);
+
   const modulesCount = Math.floor(
     (state.requestedPower * 1000) / state.modulePower
   );
   const truePower = (modulesCount * state.modulePower) / 1000;
 
-  const totalNetPrice = 1;
+  const totalNetPrice = modulesCount * modulePrice;
 
   console.log('żądana moc', state.requestedPower);
   console.log('ilość modułów', modulesCount);
   console.log('moc modułu', state.modulePower);
+  console.log('cena modułu');
   console.log('konstrukcja dachu', state.typeOfRoof);
   console.log(state.clientInfo, '%');
   console.log(state.phase, 'fazowy');
