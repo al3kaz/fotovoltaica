@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Modules = ({ moduls, setModulePower, setTypeOfRoof, setModuleIndex }) => {
+const Modules = ({ moduls, constructions, setModulePower, setTypeOfRoof, setModuleIndex }) => {
   const showModule = moduls.map((item) => {
     return (
       <option key={item.id} value={item.power} price={item.price}>
@@ -10,13 +10,8 @@ const Modules = ({ moduls, setModulePower, setTypeOfRoof, setModuleIndex }) => {
   });
 
   const priceDependingOnRoof = (value) => {
-    if (value === 'flat') {
-      setTypeOfRoof('25');
-    } else if (value === 'slant') {
-      setTypeOfRoof('50');
-    } else if (value === 'ground') {
-      setTypeOfRoof('100');
-    }
+    const roofType = constructions.filter(item => item.type === value).map(item => item.price)
+    setTypeOfRoof(roofType[0])
   };
 
   return (
@@ -25,7 +20,7 @@ const Modules = ({ moduls, setModulePower, setTypeOfRoof, setModuleIndex }) => {
         <label className="pe-2">moduł</label>
         <select
           onChange={(e) => {
-            setModuleIndex(e.target.selectedIndex);
+            setModuleIndex(e.target.selectedIndex - 1);
             setModulePower(e.target.value);
           }}
         >

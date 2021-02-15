@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TotalPrice = ({ totalNetPrice }) => {
+const TotalPrice = ({ totalNetPrice, totalGrosPrice, vat }) => {
   return (
     <div className="d-flex flex-column bd-highlight m-3 ">
       <div>
@@ -8,8 +8,8 @@ const TotalPrice = ({ totalNetPrice }) => {
         <input type="number" />
       </div>
       <p>cena netto : {totalNetPrice}</p>
-      <p>VAT : 1</p>
-      <p>cena brutton : 2</p>
+      <p>VAT : {vat}</p>
+      <p>cena brutton : {totalGrosPrice}</p>
     </div>
   );
 };

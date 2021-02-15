@@ -36,17 +36,64 @@ const Calculator = () => {
   //fetch data
   const [moduls, setModuls] = React.useState(false);
   const [inverters, setInverters] = React.useState(false);
+  const [constructions, setConstructions] = React.useState([]);
+  const [installation, setInstallation] = React.useState([]);
+  const [protection, setProtection] = React.useState([]);
 
   const [state, dispatch] = React.useReducer(reducer, {
     requestedPower: 0,
-    moduleIndex: '',
+    moduleIndex: 0,
     modulePower: 0,
     clientInfo: 0,
     phase: 1,
     inverterProducent: '',
     correctInverterModelPrice: 0,
     typeOfRoof: 0,
+    intallationPrice: 0
   });
+
+  React.useEffect(() => {
+    const modulesRef = db.collection('moduls');
+    const invertersRef = db.collection('inverters');
+    const constructionsRef = db.collection('constructions')
+    const installationRef = db.collection('installation')
+    const protectionRef = db.collection('protection')
+    modulesRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setModuls(data);
+    });
+    invertersRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setInverters(data);
+    });
+    constructionsRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setConstructions(data);
+    });
+    installationRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setInstallation(data);
+    });
+    protectionRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setProtection(data);
+    });
+  }, []);
 
   const setRequestedPower = (requestedPower) =>
     dispatch({ type: 'setRequestedPower', payload: requestedPower });
@@ -74,34 +121,15 @@ const Calculator = () => {
   const setTypeOfRoof = (typeOfRoof) =>
     dispatch({ type: 'setTypeOfRoof', payload: typeOfRoof });
 
-  React.useEffect(() => {
-    const modulesRef = db.collection('moduls');
-    const invertersRef = db.collection('inverters');
-    modulesRef.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setModuls(data);
-    });
-    invertersRef.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setInverters(data);
-    });
-  }, []);
 
   if (!inverters) {
     return <Spinner />;
   }
 
   const modulePrice = () => {
-    if (state.moduleIndex || state.moduleIndex === 0)
+    if (state.moduleIndex >= 0)
       return moduls[state.moduleIndex].price;
   };
-  console.log(modulePrice());
   const instalationPower = (e) => setRequestedPower(e.target.value);
 
   const modulesCount = Math.floor(
@@ -109,18 +137,31 @@ const Calculator = () => {
   );
   const truePower = (modulesCount * state.modulePower) / 1000;
 
-  const totalNetPrice = modulesCount * modulePrice;
-  console.log(typeof modulesCount, typeof modulePrice);
+  const installationPrice = () => {
+    if (truePower) {
+      return installation.filter(item => item.powermax > truePower && item.powermin < truePower)[0].price;
+    }
+  }
 
-  console.log('żądana moc', state.requestedPower);
+  const protectionCount = () => {
+    if (truePower || protection === []) {
+      return protection.filter(item => item.powermax >= truePower && item.powermin <= truePower).map(item => item.price).reduce((totalProtectionCount, protectionPrice) => {
+        return (totalProtectionCount + protectionPrice)
+      })
+    }
+  }
+  const totalNetPrice = modulesCount * modulePrice() + state.correctInverterModelPrice + modulesCount * state.typeOfRoof + truePower * installationPrice() /*koszty AC/DC tutaj*/ + protectionCount() /*narzut na koszty stałe*/
+  console.log(state.clientInfo)
+  const totalGrosPrice = totalNetPrice * state.clientInfo
+  const vat = (totalGrosPrice - totalNetPrice).toFixed(2)
+
   console.log('ilość modułów', modulesCount);
-  console.log('moc modułu', state.modulePower);
-  console.log('cena modułu');
-  console.log('konstrukcja dachu', state.typeOfRoof);
-  console.log(state.clientInfo, '%');
-  console.log(state.phase, 'fazowy');
-  console.log('inwerter Producent:', state.inverterProducent);
+  console.log('cena modułu', modulePrice());
   console.log('inwerter cena', state.correctInverterModelPrice);
+  console.log('konstrukcja dachu', state.typeOfRoof);
+  console.log('moc instalacji ', truePower);
+  console.log('cena montazu', installationPrice())
+  console.log(totalNetPrice);
   console.log('-----------------------');
 
   return (
@@ -137,6 +178,7 @@ const Calculator = () => {
         </div>
         <Modules
           moduls={moduls}
+          constructions={constructions}
           setModulePower={setModulePower}
           setTypeOfRoof={setTypeOfRoof}
           setModuleIndex={setModuleIndex}
@@ -148,14 +190,14 @@ const Calculator = () => {
         </div>
         <div className="m-2">
           <label className="pe-2">rodzaj klienta</label>
-          <select onChange={(e) => setClientInfo(e.target.value)}>
+          <select onChange={(e) => setClientInfo(1 * e.target.value)}>
             <optgroup label="klient">
               <option value="" selected disabled hidden />
-              <option value="8">indywidualny 8%</option>
-              <option value="23">indywidualny 23%</option>
-              <option value="23">firma 23%</option>
-              <option value="8">rolnik 8%</option>
-              <option value="23">rolnik 23%</option>
+              <option value="1.08">indywidualny 8%</option>
+              <option value="1.23">indywidualny 23%</option>
+              <option value="1.23">firma 23%</option>
+              <option value="1.08">rolnik 8%</option>
+              <option value="1.23">rolnik 23%</option>
             </optgroup>
           </select>
         </div>
@@ -169,7 +211,7 @@ const Calculator = () => {
         setInverterProducent={setInverterProducent}
         setCorrectInverterModelPrice={setCorrectInverterModelPrice}
       />
-      <TotalPrice totalNetPrice={totalNetPrice} />
+      <TotalPrice totalNetPrice={totalNetPrice} totalGrosPrice={totalGrosPrice} vat={vat} />
     </div>
   );
 };

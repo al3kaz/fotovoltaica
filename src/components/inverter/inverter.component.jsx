@@ -24,7 +24,7 @@ const Inverter = ({
     .map((e) => allInverters[e]);
 
   const inverterModelPrice = inverters
-    .filter((model) => model.brand === inverterProducent)
+    .filter((model) => model.brand === inverterProducent && model.phase === phase)
     .map((item) => {
       return (
         <option key={item.id} value={item.price}>
@@ -39,9 +39,9 @@ const Inverter = ({
         <span className="m-1">
           <input
             type="checkbox"
-            value="1"
+            value='1'
             onChange={(e) => {
-              setPhase(e.target.value);
+              setPhase(1 * e.target.value);
             }}
           />
           <label className="ps-2"> 1-fazowy</label>
@@ -52,7 +52,7 @@ const Inverter = ({
           type="checkbox"
           value="3"
           onClick={(e) => {
-            setPhase(e.target.value);
+            setPhase(1 * e.target.value);
           }}
         />
         <label className="ps-2"> 3-fazowy</label>
@@ -74,7 +74,7 @@ const Inverter = ({
         <label className="pe-2">Model falownika</label>
         <select
           onChange={(e) => {
-            setCorrectInverterModelPrice(e.target.value);
+            setCorrectInverterModelPrice(1 * e.target.value);
           }}
         >
           <optgroup label="moduły do wyboru">
