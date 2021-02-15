@@ -9,22 +9,70 @@ import Spinner from '../../components/spinner/spinner';
 
 const db = firebase.firestore();
 
+function reducer(state, action) {
+  switch (action.type) {
+    case 'setRequestedPower':
+      return { ...state, requestedPower: action.payload };
+    case 'setModuleIndex':
+      return { ...state, moduleIndex: action.payload };
+    case 'setModulePower':
+      return { ...state, modulePower: action.payload };
+    case 'setClientInfo':
+      return { ...state, clientInfo: action.payload };
+    case 'setPhase':
+      return { ...state, phase: action.payload };
+    case 'setInverterProducent':
+      return { ...state, inverterProducent: action.payload };
+    case 'setCorrectInverterModelPrice':
+      return { ...state, correctInverterModelPrice: action.payload };
+    case 'setTypeOfRoof':
+      return { ...state, typeOfRoof: action.payload };
+    default:
+      throw new Error(`invalid aciotn type: ${action.type}`);
+  }
+}
+
 const Calculator = () => {
   //fetch data
   const [moduls, setModuls] = React.useState(false);
   const [inverters, setInverters] = React.useState(false);
-  //input data
-  const [requestedPower, setRequestedPower] = React.useState('');
-  const [moduleIndex, setModuleIndex] = React.useState('');
-  const [modulePower, setModulePower] = React.useState('');
-  const [clientInfo, setClientInfo] = React.useState('');
-  const [phase, setPhase] = React.useState('');
-  const [inverterProducent, setInverterProducent] = React.useState('');
-  const [
-    correctInverterModelPrice,
-    setCorrectInverterModelPrice,
-  ] = React.useState('');
-  const [typeOfRoof, setTypeofRoof] = React.useState('');
+
+  const [state, dispatch] = React.useReducer(reducer, {
+    requestedPower: '',
+    moduleIndex: '',
+    modulePower: '',
+    clientInfo: '',
+    phase: '',
+    inverterProducent: '',
+    correctInverterModelPrice: '',
+    typeOfRoof: '',
+  });
+
+  const setRequestedPower = (requestedPower) =>
+    dispatch({ type: 'setRequestedPower', payload: requestedPower });
+
+  const setModuleIndex = (moduleIndex) =>
+    dispatch({ type: 'setModuleIndex', payload: moduleIndex });
+
+  const setModulePower = (modulePower) =>
+    dispatch({ type: 'setModulePower', payload: modulePower });
+
+  const setClientInfo = (clientInfo) =>
+    dispatch({ type: 'setClientInfo', payload: clientInfo });
+
+  const setPhase = (phase) => dispatch({ type: 'setPhase', payload: phase });
+
+  const setInverterProducent = (inverterProducent) =>
+    dispatch({ type: 'setInverterProducent', payload: inverterProducent });
+
+  const setCorrectInverterModelPrice = (correctInverterModelPrice) =>
+    dispatch({
+      type: 'setCorrectInverterModelPrice',
+      payload: correctInverterModelPrice,
+    });
+
+  const setTypeOfRoof = (typeOfRoof) =>
+    dispatch({ type: 'setTypeOfRoof', payload: typeOfRoof });
 
   React.useEffect(() => {
     const modulesRef = db.collection('moduls');
@@ -50,22 +98,24 @@ const Calculator = () => {
   }
 
   const modulePrice = () => {
-    if (moduleIndex) return moduls[moduleIndex].price;
+    if (state.moduleIndex) return moduls[state.moduleIndex].price;
   };
   const instalationPower = (e) => setRequestedPower(e.target.value);
-  const modulesCount = Math.floor((requestedPower * 1000) / modulePower);
-  const truePower = (modulesCount * modulePower) / 1000;
+  const modulesCount = Math.floor(
+    (state.requestedPower * 1000) / state.modulePower
+  );
+  const truePower = (modulesCount * state.modulePower) / 1000;
 
   const totalNetPrice = 1;
 
-  console.log('żądana moc', requestedPower);
+  console.log('żądana moc', state.requestedPower);
   console.log('ilość modułów', modulesCount);
-  console.log('moc modułu', modulePower);
-  console.log('konstrukcja dachu', typeOfRoof);
-  console.log(clientInfo, '%');
-  console.log(phase, 'fazowy');
-  console.log('inwerter Producent:', inverterProducent);
-  console.log('inwerter cena', correctInverterModelPrice);
+  console.log('moc modułu', state.modulePower);
+  console.log('konstrukcja dachu', state.typeOfRoof);
+  console.log(state.clientInfo, '%');
+  console.log(state.phase, 'fazowy');
+  console.log('inwerter Producent:', state.inverterProducent);
+  console.log('inwerter cena', state.correctInverterModelPrice);
   console.log('-----------------------');
 
   return (
@@ -83,7 +133,7 @@ const Calculator = () => {
         <Modules
           moduls={moduls}
           setModulePower={setModulePower}
-          setTypeofRoof={setTypeofRoof}
+          setTypeOfRoof={setTypeOfRoof}
           setModuleIndex={setModuleIndex}
         />
         <p className="fw-bold">moc : {truePower} kWp</p>
@@ -108,9 +158,9 @@ const Calculator = () => {
       <Inverter
         inverters={inverters}
         truePower={truePower}
-        phase={phase}
+        phase={state.phase}
         setPhase={setPhase}
-        inverterProducent={inverterProducent}
+        inverterProducent={state.inverterProducent}
         setInverterProducent={setInverterProducent}
         setCorrectInverterModelPrice={setCorrectInverterModelPrice}
       />

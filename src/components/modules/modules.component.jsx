@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Modules = ({ moduls, setModulePower, setTypeofRoof, setModuleIndex }) => {
+const Modules = ({ moduls, setModulePower, setTypeOfRoof, setModuleIndex }) => {
   const showModule = moduls.map((item) => {
     return (
       <option key={item.id} value={item.power} price={item.price}>
@@ -11,11 +11,11 @@ const Modules = ({ moduls, setModulePower, setTypeofRoof, setModuleIndex }) => {
 
   const priceDependingOnRoof = (value) => {
     if (value === 'flat') {
-      setTypeofRoof('25');
+      setTypeOfRoof('25');
     } else if (value === 'slant') {
-      setTypeofRoof('50');
+      setTypeOfRoof('50');
     } else if (value === 'ground') {
-      setTypeofRoof('100');
+      setTypeOfRoof('100');
     }
   };
 
