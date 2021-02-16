@@ -17,9 +17,12 @@ const TotalPrice = ({
           }}
         />
       </div>
-      <p>cena netto : {totalNetPriceWithMargins}</p>
-      <p>VAT : {vat}</p>
-      <p>cena brutton : {totalGrosPrice}</p>
+      <p>
+        cena netto :{' '}
+        {isNaN(totalNetPriceWithMargins) ? '' : totalNetPriceWithMargins}
+      </p>
+      <p>VAT : {isNaN(vat) ? '' : vat}</p>
+      <p>cena brutton : {isNaN(totalGrosPrice) ? '' : totalGrosPrice}</p>
     </div>
   );
 };

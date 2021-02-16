@@ -61,11 +61,6 @@ const HomePage = () => {
       setProtection(data);
     });
   }, []);
-  console.log(moduls);
-  console.log(inverters);
-  console.log(constructions);
-  console.log(installation);
-  console.log(protection);
 
   return (
     <div>

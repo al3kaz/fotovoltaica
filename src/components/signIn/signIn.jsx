@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import { auth } from "../../firebase";
+import React, { useState } from 'react';
+import { auth } from '../../firebase';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
-
   const signInWithEmailAndPasswordHandler = (event, email, password) => {
     event.preventDefault();
-    auth.signInWithEmailAndPassword(email, password).catch(error => {
-      setError("Error signing in with password and email!");
-      console.error("Error signing in with password and email", error);
+    auth.signInWithEmailAndPassword(email, password).catch((error) => {
+      setError('Error signing in with password and email!');
+      console.error('Error signing in with password and email', error);
     });
   };
 
@@ -20,8 +19,7 @@ const SignIn = () => {
 
     if (name === 'userEmail') {
       setEmail(value);
-    }
-    else if (name === 'userPassword') {
+    } else if (name === 'userPassword') {
       setPassword(value);
     }
   };
@@ -31,11 +29,14 @@ const SignIn = () => {
       <h1>Sign In</h1>
       <div className="">
         {error !== null && <div className="">{error}</div>}
-        <form className="form-signin">
+        <form
+          className="form-signin"
+          onClick={(event) => {
+            signInWithEmailAndPasswordHandler(event, email, password);
+          }}
+        >
           <div className="form-label-group">
-            <label htmlFor="userEmail">
-              Email:
-          </label>
+            <label htmlFor="userEmail">Email:</label>
             <input
               type="email"
               className="form-control"
@@ -49,7 +50,7 @@ const SignIn = () => {
           <div className="form-label-group">
             <label htmlFor="userPassword" className="">
               Password:
-          </label>
+            </label>
             <input
               type="password"
               className="form-control"
@@ -60,7 +61,10 @@ const SignIn = () => {
               onChange={(event) => onChangeHandler(event)}
             />
           </div>
-          <button className="btn btn-lg btn-primary btn-block text-uppercase mt-3" onClick={(event) => { signInWithEmailAndPasswordHandler(event, email, password) }}>
+          <button
+            className="btn btn-lg btn-primary btn-block text-uppercase mt-3"
+            type="submit"
+          >
             Sign in
           </button>
         </form>

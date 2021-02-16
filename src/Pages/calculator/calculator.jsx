@@ -156,7 +156,7 @@ const Calculator = () => {
           setTypeOfRoof={setTypeOfRoof}
           setModuleIndex={setModuleIndex}
         />
-        <p className="fw-bold">moc : {truePower} kWp</p>
+        <p className="fw-bold">moc : {isNaN(truePower) ? '' : truePower} kWp</p>
         <div className="m-2">
           <label className="pe-2">liczba modułów</label>
           <input type="number" value={modulesCount} />
