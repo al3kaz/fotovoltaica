@@ -28,8 +28,8 @@ const App = () => {
                 <ProtectionProvider>
                   <Route exact path="/" component={HomePage} />
                   <Route path="/calculator" component={Calculator} />
-                  <Route exact path="/Offers" component={Offers} />
-                  <Route exact path="/database" component={Database} />
+                  <Route path="/Offers" component={Offers} />
+                  <Route path="/database" component={Database} />
                 </ProtectionProvider>
               </InstallationProvider>
             </ConstructionsProvider>

@@ -135,7 +135,7 @@ const Calculator = () => {
     2
   );
 
-  const vat = (totalGrosPrice - totalNetPrice).toFixed(2);
+  const vat = (totalGrosPrice - totalNetPriceWithMargins).toFixed(2);
 
   return (
     <div
