@@ -27,6 +27,8 @@ function reducer(state, action) {
       return { ...state, correctInverterModelPrice: action.payload };
     case 'setTypeOfRoof':
       return { ...state, typeOfRoof: action.payload };
+    case 'setMargins':
+      return { ...state, margins: action.payload };
     default:
       throw new Error(`invalid aciotn type: ${action.type}`);
   }
@@ -49,15 +51,16 @@ const Calculator = () => {
     inverterProducent: '',
     correctInverterModelPrice: 0,
     typeOfRoof: 0,
-    intallationPrice: 0
+    intallationPrice: 0,
+    margins: 0,
   });
 
   React.useEffect(() => {
     const modulesRef = db.collection('moduls');
     const invertersRef = db.collection('inverters');
-    const constructionsRef = db.collection('constructions')
-    const installationRef = db.collection('installation')
-    const protectionRef = db.collection('protection')
+    const constructionsRef = db.collection('constructions');
+    const installationRef = db.collection('installation');
+    const protectionRef = db.collection('protection');
     modulesRef.get().then((snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -121,14 +124,15 @@ const Calculator = () => {
   const setTypeOfRoof = (typeOfRoof) =>
     dispatch({ type: 'setTypeOfRoof', payload: typeOfRoof });
 
+  const setMargins = (margins) =>
+    dispatch({ type: 'setMargins', payload: margins });
 
   if (!inverters) {
     return <Spinner />;
   }
 
   const modulePrice = () => {
-    if (state.moduleIndex >= 0)
-      return moduls[state.moduleIndex].price;
+    if (state.moduleIndex >= 0) return moduls[state.moduleIndex].price;
   };
   const instalationPower = (e) => setRequestedPower(e.target.value);
 
@@ -139,30 +143,47 @@ const Calculator = () => {
 
   const installationPrice = () => {
     if (truePower) {
-      return installation.filter(item => item.powermax > truePower && item.powermin < truePower)[0].price;
+      const installFilter = installation.filter(
+        (item) => item.powermax > truePower && item.powermin < truePower
+      );
+      if (installFilter.length !== 0) {
+        return installFilter[0].price;
+      } else return new Error('brak wyceny montażu ');
     }
-  }
+  };
 
   const protectionCount = () => {
-    if (truePower || protection === []) {
-      return protection.filter(item => item.powermax >= truePower && item.powermin <= truePower).map(item => item.price).reduce((totalProtectionCount, protectionPrice) => {
-        return (totalProtectionCount + protectionPrice)
-      })
+    if (truePower) {
+      const protFilter = protection.filter(
+        (item) => item.powermax >= truePower && item.powermin <= truePower
+      );
+      if (protFilter.length !== 0) {
+        return protFilter
+          .map((item) => item.price)
+          .reduce((totalProtectionCount, protectionPrice) => {
+            return totalProtectionCount + protectionPrice;
+          });
+      } else return 0;
     }
-  }
-  const totalNetPrice = modulesCount * modulePrice() + state.correctInverterModelPrice + modulesCount * state.typeOfRoof + truePower * installationPrice() /*koszty AC/DC tutaj*/ + protectionCount() /*narzut na koszty stałe*/
-  console.log(state.clientInfo)
-  const totalGrosPrice = totalNetPrice * state.clientInfo
-  const vat = (totalGrosPrice - totalNetPrice).toFixed(2)
+  };
 
-  console.log('ilość modułów', modulesCount);
-  console.log('cena modułu', modulePrice());
-  console.log('inwerter cena', state.correctInverterModelPrice);
-  console.log('konstrukcja dachu', state.typeOfRoof);
-  console.log('moc instalacji ', truePower);
-  console.log('cena montazu', installationPrice())
-  console.log(totalNetPrice);
-  console.log('-----------------------');
+  //end price
+
+  const totalNetPrice =
+    modulesCount * modulePrice() +
+    state.correctInverterModelPrice +
+    modulesCount * state.typeOfRoof +
+    truePower * installationPrice() /*koszty AC/DC tutaj*/ +
+    protectionCount(); /*narzut na koszty stałe*/
+
+  const totalNetPriceWithMargins =
+    (state.margins / 100) * totalNetPrice + totalNetPrice;
+
+  const totalGrosPrice = (totalNetPriceWithMargins * state.clientInfo).toFixed(
+    2
+  );
+
+  const vat = (totalGrosPrice - totalNetPrice).toFixed(2);
 
   return (
     <div
@@ -211,7 +232,12 @@ const Calculator = () => {
         setInverterProducent={setInverterProducent}
         setCorrectInverterModelPrice={setCorrectInverterModelPrice}
       />
-      <TotalPrice totalNetPrice={totalNetPrice} totalGrosPrice={totalGrosPrice} vat={vat} />
+      <TotalPrice
+        totalNetPriceWithMargins={totalNetPriceWithMargins}
+        totalGrosPrice={totalGrosPrice}
+        vat={vat}
+        setMargins={setMargins}
+      />
     </div>
   );
 };
