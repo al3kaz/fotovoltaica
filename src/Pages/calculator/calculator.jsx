@@ -1,13 +1,15 @@
 import React from 'react';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+
+import { useModuls } from '../../context/moduls.context';
+import { useInverters } from '../../context/inverters.context';
+import { useConstructions } from '../../context/constructions.context';
+import { useInstallation } from '../../context/installation.context';
+import { useProtection } from '../../context/protection.context';
+
 import Navigation from '../../components/navigation/navigation.component';
 import Modules from '../../components/modules/modules.component';
 import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
-import Spinner from '../../components/spinner/spinner';
-
-const db = firebase.firestore();
 
 function reducer(state, action) {
   switch (action.type) {
@@ -35,12 +37,11 @@ function reducer(state, action) {
 }
 
 const Calculator = () => {
-  //fetch data
-  const [moduls, setModuls] = React.useState(false);
-  const [inverters, setInverters] = React.useState(false);
-  const [constructions, setConstructions] = React.useState([]);
-  const [installation, setInstallation] = React.useState([]);
-  const [protection, setProtection] = React.useState([]);
+  const [moduls] = useModuls();
+  const [inverters] = useInverters();
+  const [constructions] = useConstructions();
+  const [installation] = useInstallation();
+  const [protection] = useProtection();
 
   const [state, dispatch] = React.useReducer(reducer, {
     requestedPower: 0,
@@ -54,49 +55,6 @@ const Calculator = () => {
     intallationPrice: 0,
     margins: 0,
   });
-
-  React.useEffect(() => {
-    const modulesRef = db.collection('moduls');
-    const invertersRef = db.collection('inverters');
-    const constructionsRef = db.collection('constructions');
-    const installationRef = db.collection('installation');
-    const protectionRef = db.collection('protection');
-    modulesRef.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setModuls(data);
-    });
-    invertersRef.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setInverters(data);
-    });
-    constructionsRef.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setConstructions(data);
-    });
-    installationRef.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setInstallation(data);
-    });
-    protectionRef.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setProtection(data);
-    });
-  }, []);
 
   const setRequestedPower = (requestedPower) =>
     dispatch({ type: 'setRequestedPower', payload: requestedPower });
@@ -127,10 +85,6 @@ const Calculator = () => {
   const setMargins = (margins) =>
     dispatch({ type: 'setMargins', payload: margins });
 
-  if (!inverters) {
-    return <Spinner />;
-  }
-
   const modulePrice = () => {
     if (state.moduleIndex >= 0) return moduls[state.moduleIndex].price;
   };
@@ -148,7 +102,7 @@ const Calculator = () => {
       );
       if (installFilter.length !== 0) {
         return installFilter[0].price;
-      } else return new Error('brak wyceny montażu ');
+      } else return 0;
     }
   };
 
@@ -166,8 +120,6 @@ const Calculator = () => {
       } else return 0;
     }
   };
-
-  //end price
 
   const totalNetPrice =
     modulesCount * modulePrice() +

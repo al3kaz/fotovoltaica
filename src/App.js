@@ -1,5 +1,10 @@
 import React, { useContext } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { ModulsProvider } from './context/moduls.context';
+import { InvertersProvider } from './context/inverters.context';
+import { ConstructionsProvider } from './context/constructions.context';
+import { InstallationProvider } from './context/installation.context';
+import { ProtectionProvider } from './context/protection.context';
 import HomePage from './Pages/homePage/homePage';
 import SignIn from './components/signIn/signIn';
 import Calculator from './Pages/calculator/calculator';
@@ -16,10 +21,20 @@ const App = () => {
   return (
     <div className="container">
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/calculator" component={Calculator} />
-        <Route exact path="/Offers" component={Offers} />
-        <Route exact path="/database" component={Database} />
+        <InvertersProvider>
+          <ModulsProvider>
+            <ConstructionsProvider>
+              <InstallationProvider>
+                <ProtectionProvider>
+                  <Route exact path="/" component={HomePage} />
+                  <Route path="/calculator" component={Calculator} />
+                  <Route exact path="/Offers" component={Offers} />
+                  <Route exact path="/database" component={Database} />
+                </ProtectionProvider>
+              </InstallationProvider>
+            </ConstructionsProvider>
+          </ModulsProvider>
+        </InvertersProvider>
       </Switch>
     </div>
   );
