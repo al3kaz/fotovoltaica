@@ -164,7 +164,9 @@ const DatabaseModuls = () => {
           onChange={handleChange}
           required
         ></FormInput>
-        <button type="submit">dodaj Moduł</button>
+        <button className="btn btn-success mb-3" type="submit">
+          dodaj Moduł
+        </button>
       </form>
     </div>
   );

@@ -1,17 +1,34 @@
 import React from 'react';
 
-const Modules = ({ moduls, constructions, setModulePower, setTypeOfRoof, setModuleIndex }) => {
-  const showModule = moduls.map((item) => {
+const Modules = ({
+  moduls,
+  constructions,
+  setModulePower,
+  setTypeOfRoof,
+  setModuleIndex,
+}) => {
+  function sortModules(a, b) {
+    if (a.brand < b.brand) {
+      return -1;
+    }
+    if (a.brand > b.brand) {
+      return 1;
+    }
+    return 0;
+  }
+  const showModule = moduls.sort(sortModules).map((item) => {
     return (
       <option key={item.id} value={item.power} price={item.price}>
-        {item.brand}
+        {item.brand} "{item.model}"
       </option>
     );
   });
 
   const priceDependingOnRoof = (value) => {
-    const roofType = constructions.filter(item => item.type === value).map(item => item.price)
-    setTypeOfRoof(roofType[0])
+    const roofType = constructions
+      .filter((item) => item.type === value)
+      .map((item) => item.price);
+    setTypeOfRoof(roofType[0]);
   };
 
   return (

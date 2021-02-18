@@ -31,7 +31,7 @@ const SignIn = () => {
         {error !== null && <div className="">{error}</div>}
         <form
           className="form-signin"
-          onClick={(event) => {
+          onSubmit={(event) => {
             signInWithEmailAndPasswordHandler(event, email, password);
           }}
         >
