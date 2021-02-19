@@ -1,17 +1,14 @@
 import React from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 
-import { useModuls } from '../../context/moduls.context';
-import { useInverters } from '../../context/inverters.context';
-import { useConstructions } from '../../context/constructions.context';
-import { useInstallation } from '../../context/installation.context';
-import { useProtection } from '../../context/protection.context';
+import useFirestoreData from '../../hooks/useFirestoreData';
 
 import Navigation from '../../components/navigation/navigation.component';
 import Modules from '../../components/modules/modules.component';
 import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
 import MyDocument from '../../components/pdfRender/pdfRender.component';
+import Spinner from '../../components/spinner/spinner';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -39,11 +36,13 @@ function reducer(state, action) {
 }
 
 const Calculator = () => {
-  const [moduls] = useModuls();
-  const [inverters] = useInverters();
-  const [constructions] = useConstructions();
-  const [installation] = useInstallation();
-  const [protection] = useProtection();
+  const [
+    moduls,
+    inverters,
+    constructions,
+    installation,
+    protection,
+  ] = useFirestoreData();
 
   const [state, dispatch] = React.useReducer(reducer, {
     requestedPower: 0,
@@ -57,7 +56,7 @@ const Calculator = () => {
     intallationPrice: 0,
     margins: 0,
   });
-
+  if (moduls.length === 0) return <Spinner />;
   const setRequestedPower = (requestedPower) =>
     dispatch({ type: 'setRequestedPower', payload: requestedPower });
 
