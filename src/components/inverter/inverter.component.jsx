@@ -24,7 +24,9 @@ const Inverter = ({
     .map((e) => allInverters[e]);
 
   const inverterModelPrice = inverters
-    .filter((model) => model.brand === inverterProducent && model.phase === phase)
+    .filter(
+      (model) => model.brand === inverterProducent && model.phase === phase
+    )
     .map((item) => {
       return (
         <option key={item.id} value={item.price}>
@@ -32,31 +34,27 @@ const Inverter = ({
         </option>
       );
     });
+
   return (
     <div className="d-flex flex-column bd-highlight m-3 ">
       <h3>Informacje o falowniu </h3>
-      {truePower <= '3.6' ? (
-        <span className="m-1">
-          <input
-            type="checkbox"
-            value='1'
-            onChange={(e) => {
-              setPhase(1 * e.target.value);
-            }}
-          />
-          <label className="ps-2"> 1-fazowy</label>
-        </span>
-      ) : null}
-      <span className="m-1">
-        <input
-          type="checkbox"
-          value="3"
-          onClick={(e) => {
-            setPhase(1 * e.target.value);
-          }}
-        />
-        <label className="ps-2"> 3-fazowy</label>
-      </span>
+      <form
+        onClick={(e) => {
+          if (phase === 1) {
+            setPhase(3);
+            e.target.checked = false;
+          } else setPhase(1 * e.target.value);
+        }}
+      >
+        {truePower <= 3.6 ? (
+          <span className="m-1">
+            <input type="radio" id="one" value="1" />
+            <label for="one" className="ps-2">
+              1-fazowy
+            </label>
+          </span>
+        ) : null}
+      </form>
       <div className="m-2">
         <label className="pe-2">Producent falownika</label>
         <select

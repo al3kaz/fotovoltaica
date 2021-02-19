@@ -48,7 +48,7 @@ const Calculator = () => {
     moduleIndex: 0,
     modulePower: 0,
     clientInfo: 0,
-    phase: 1,
+    phase: 3,
     inverterProducent: '',
     correctInverterModelPrice: 0,
     typeOfRoof: 0,

@@ -26,7 +26,7 @@ const SignIn = () => {
 
   return (
     <div className="container">
-      <h1>Sign In</h1>
+      <h1>Logowanie</h1>
       <div className="">
         {error !== null && <div className="">{error}</div>}
         <form
@@ -49,7 +49,7 @@ const SignIn = () => {
           </div>
           <div className="form-label-group">
             <label htmlFor="userPassword" className="">
-              Password:
+              Hasło:
             </label>
             <input
               type="password"
