@@ -1,4 +1,5 @@
 import React from 'react';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import { useModuls } from '../../context/moduls.context';
 import { useInverters } from '../../context/inverters.context';
@@ -10,6 +11,7 @@ import Navigation from '../../components/navigation/navigation.component';
 import Modules from '../../components/modules/modules.component';
 import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
+import MyDocument from '../../components/pdfRender/pdfRender.component';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -190,6 +192,16 @@ const Calculator = () => {
         vat={vat}
         setMargins={setMargins}
       />
+
+      <PDFDownloadLink
+        className="btn btn-success mb-3"
+        document={<MyDocument />}
+        fileName="somename.pdf"
+      >
+        {({ blob, url, loading, error }) =>
+          loading ? 'Loading document...' : 'Pobierz ofertę'
+        }
+      </PDFDownloadLink>
     </div>
   );
 };
