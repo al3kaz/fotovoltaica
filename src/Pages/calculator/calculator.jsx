@@ -163,15 +163,12 @@ const Calculator = () => {
           <input type="number" value={modulesCount} />
         </div>
         <div className="m-2">
-          <label className="pe-2">rodzaj klienta</label>
+          <label className="pe-2">podatek</label>
           <select onChange={(e) => setClientInfo(1 * e.target.value)}>
-            <optgroup label="klient">
+            <optgroup label="podatek">
               <option value="" selected disabled hidden />
-              <option value="1.08">indywidualny 8%</option>
-              <option value="1.23">indywidualny 23%</option>
-              <option value="1.23">firma 23%</option>
-              <option value="1.08">rolnik 8%</option>
-              <option value="1.23">rolnik 23%</option>
+              <option value="1.08">8%</option>
+              <option value="1.23">23%</option>
             </optgroup>
           </select>
         </div>

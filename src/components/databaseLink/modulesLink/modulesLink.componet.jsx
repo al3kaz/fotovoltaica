@@ -2,9 +2,12 @@ import React from 'react';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import FormInput from '../../form-input/form-input.component';
+import useFirestoreData from '../../../hooks/useFirestoreData';
 const db = firebase.firestore();
 
 const DatabaseModuls = () => {
+  const [moreInfo, setMoreInfo] = React.useState(false)
+  const [moduls] = useFirestoreData();
   const [moduleCredentials, setModuleCredentials] = React.useState({
     brand: '',
     datasheet: '',
@@ -87,8 +90,36 @@ const DatabaseModuls = () => {
     });
   };
 
+  const modulsList = moduls.map(modul => {
+    return (
+      moreInfo ? null :
+
+        < tr key={modul.model} >
+          <td>{modul.brand}</td>
+          <td>{modul.model}</td>
+          <td>{modul.power}</td>
+          <td>{modul.price}</td>
+          <td>{modul.warranty}</td>
+        </ tr>
+
+    )
+  })
+
+
   return (
     <div>
+      <table className="table table-striped table-hover">
+        <tr className="table-active">
+          <th scope="col">Marka</th>
+          <th scope="col">Model</th>
+          <th scope="col">Moc</th>
+          <th scope="col">Cena</th>
+          <th scope="col">Gwarancja</th>
+        </tr>
+        <tbody>
+          {modulsList}
+        </tbody>
+      </table>
       <form onSubmit={addNewModule}>
         <FormInput
           type="text"

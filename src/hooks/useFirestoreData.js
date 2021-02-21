@@ -19,6 +19,7 @@ const useFirestoreData = () => {
   const [protection, setProtection] = useProtection();
 
   React.useEffect(() => {
+    if (moduls.length !== 0) return;
     const modulesRef = db.collection('moduls');
     const invertersRef = db.collection('inverters');
     const constructionsRef = db.collection('constructions');
