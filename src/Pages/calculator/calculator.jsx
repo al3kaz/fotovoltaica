@@ -10,6 +10,7 @@ import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
 import MyDocument from '../../components/pdfRender/pdfRender.component';
 import Spinner from '../../components/spinner/spinner';
+import NewClientForm from '../../components/databaseLink/newClientForm/newClientForm.component';
 
 const Calculator = () => {
   const [
@@ -198,7 +199,7 @@ const Calculator = () => {
         vat={vat}
         setMargins={setMargins}
       />
-
+      <NewClientForm />
       <PDFDownloadLink
         className="btn btn-success mb-3"
         document={<MyDocument />}
