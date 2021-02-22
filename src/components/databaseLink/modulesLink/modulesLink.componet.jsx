@@ -6,7 +6,6 @@ import useFirestoreData from '../../../hooks/useFirestoreData';
 const db = firebase.firestore();
 
 const DatabaseModuls = () => {
-  const [moreInfo, setMoreInfo] = React.useState(false)
   const [moduls] = useFirestoreData();
   const [moduleCredentials, setModuleCredentials] = React.useState({
     brand: '',
@@ -90,21 +89,17 @@ const DatabaseModuls = () => {
     });
   };
 
-  const modulsList = moduls.map(modul => {
+  const modulsList = moduls.map((modul) => {
     return (
-      moreInfo ? null :
-
-        < tr key={modul.model} >
-          <td>{modul.brand}</td>
-          <td>{modul.model}</td>
-          <td>{modul.power}</td>
-          <td>{modul.price}</td>
-          <td>{modul.warranty}</td>
-        </ tr>
-
-    )
-  })
-
+      <tr key={modul.model}>
+        <td>{modul.brand}</td>
+        <td>{modul.model}</td>
+        <td>{modul.power}</td>
+        <td>{modul.price}</td>
+        <td>{modul.warranty}</td>
+      </tr>
+    );
+  });
 
   return (
     <div>
@@ -116,9 +111,7 @@ const DatabaseModuls = () => {
           <th scope="col">Cena</th>
           <th scope="col">Gwarancja</th>
         </tr>
-        <tbody>
-          {modulsList}
-        </tbody>
+        <tbody>{modulsList}</tbody>
       </table>
       <form onSubmit={addNewModule}>
         <FormInput

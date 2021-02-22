@@ -1,5 +1,6 @@
 import React from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import { reducer } from '../../reducerActions/calculatorActions';
 
 import useFirestoreData from '../../hooks/useFirestoreData';
 
@@ -9,31 +10,6 @@ import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
 import MyDocument from '../../components/pdfRender/pdfRender.component';
 import Spinner from '../../components/spinner/spinner';
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'setRequestedPower':
-      return { ...state, requestedPower: action.payload };
-    case 'setModuleIndex':
-      return { ...state, moduleIndex: action.payload };
-    case 'setModulePower':
-      return { ...state, modulePower: action.payload };
-    case 'setClientInfo':
-      return { ...state, clientInfo: action.payload };
-    case 'setPhase':
-      return { ...state, phase: action.payload };
-    case 'setInverterProducent':
-      return { ...state, inverterProducent: action.payload };
-    case 'setCorrectInverterModelPrice':
-      return { ...state, correctInverterModelPrice: action.payload };
-    case 'setTypeOfRoof':
-      return { ...state, typeOfRoof: action.payload };
-    case 'setMargins':
-      return { ...state, margins: action.payload };
-    default:
-      throw new Error(`invalid aciotn type: ${action.type}`);
-  }
-}
 
 const Calculator = () => {
   const [
@@ -49,14 +25,25 @@ const Calculator = () => {
     moduleIndex: 0,
     modulePower: 0,
     clientInfo: 0,
-    phase: 3,
+    phase: '3',
     inverterProducent: '',
     correctInverterModelPrice: 0,
     typeOfRoof: 0,
     intallationPrice: 0,
     margins: 0,
+    moduleCount: 0,
   });
+
+  React.useEffect(() => {
+    if (moduls.length === 0) return;
+    setModuleCount(
+      Math.floor((state.requestedPower * 1000) / state.modulePower)
+    );
+  }, [state.requestedPower, state.modulePower, moduls.length]);
+
   if (moduls.length === 0) return <Spinner />;
+
+  //////////////////////reducer functions
   const setRequestedPower = (requestedPower) =>
     dispatch({ type: 'setRequestedPower', payload: requestedPower });
 
@@ -83,18 +70,18 @@ const Calculator = () => {
   const setTypeOfRoof = (typeOfRoof) =>
     dispatch({ type: 'setTypeOfRoof', payload: typeOfRoof });
 
+  const setModuleCount = (moduleCount) =>
+    dispatch({ type: 'setModuleCount', payload: moduleCount });
+
   const setMargins = (margins) =>
     dispatch({ type: 'setMargins', payload: margins });
+  ///////////////////////////////// end
 
   const modulePrice = () => {
     if (state.moduleIndex >= 0) return moduls[state.moduleIndex].price;
   };
-  const instalationPower = (e) => setRequestedPower(e.target.value);
 
-  const modulesCount = Math.floor(
-    (state.requestedPower * 1000) / state.modulePower
-  );
-  const truePower = (modulesCount * state.modulePower) / 1000;
+  const truePower = (state.moduleCount * state.modulePower) / 1000;
 
   const installationPrice = () => {
     if (truePower) {
@@ -123,21 +110,23 @@ const Calculator = () => {
   };
 
   const totalNetPrice =
-    modulesCount * modulePrice() +
+    state.moduleCount * modulePrice() +
     state.correctInverterModelPrice +
-    modulesCount * state.typeOfRoof +
+    state.moduleCount * state.typeOfRoof +
     truePower * installationPrice() /*koszty AC/DC tutaj*/ +
-    protectionCount(); /*narzut na koszty stałe*/
+    protectionCount();
+  /*narzut na koszty stałe*/
 
-  const totalNetPriceWithMargins =
-    (state.margins / 100) * totalNetPrice + totalNetPrice;
+  const totalNetPriceWithMargins = (
+    (state.margins / 100) * totalNetPrice +
+    totalNetPrice
+  ).toFixed(2);
 
   const totalGrosPrice = (totalNetPriceWithMargins * state.clientInfo).toFixed(
     2
   );
 
   const vat = (totalGrosPrice - totalNetPriceWithMargins).toFixed(2);
-
   return (
     <div
       data-test="component-calculator"
@@ -147,7 +136,12 @@ const Calculator = () => {
       <div className="d-flex flex-column bd-highlight m-3 ">
         <div className="m-2">
           <label className="pe-2">Żądana moc</label>
-          <input type="number" onChange={instalationPower} />
+          <input
+            type="number"
+            onChange={(e) => {
+              setRequestedPower(1 * e.target.value);
+            }}
+          />
           <label>kWp</label>
         </div>
         <Modules
@@ -160,7 +154,23 @@ const Calculator = () => {
         <p className="fw-bold">moc : {isNaN(truePower) ? '' : truePower} kWp</p>
         <div className="m-2">
           <label className="pe-2">liczba modułów</label>
-          <input type="number" value={modulesCount} />
+          <button
+            className="btn btn-light btn-sm mx-1"
+            onClick={() => {
+              setModuleCount(state.moduleCount - 1);
+            }}
+          >
+            -
+          </button>
+          <input type="number" value={state.moduleCount} />
+          <button
+            className="btn btn-light btn-sm mx-1"
+            onClick={() => {
+              setModuleCount(state.moduleCount + 1);
+            }}
+          >
+            +
+          </button>
         </div>
         <div className="m-2">
           <label className="pe-2">podatek</label>

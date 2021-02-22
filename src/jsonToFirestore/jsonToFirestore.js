@@ -5,16 +5,17 @@ const db = firebase.firestore();
 
 export const addDataToFiresotre = () => {
   data.forEach(function (obj) {
-    db.collection('moduls')
+    db.collection('inverters')
       .add({
         available: obj.available,
         brand: obj.brand,
         model: obj.model,
-        power: obj.power,
-        width: obj.width,
-        height: obj.height,
+        ACpower: obj.ACpower,
+        maxDC: obj.maxDC,
+        mppt: obj.mppt,
+        stringsNum: obj.stringsNum,
+        phase: obj.phase,
         warranty: obj.warranty,
-        powerWarranty: obj.powerWarranty,
         price: obj.price,
         description: obj.description,
         datasheet: obj.datasheet,

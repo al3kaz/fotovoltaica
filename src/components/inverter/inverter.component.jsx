@@ -16,21 +16,33 @@ const Inverter = ({
       </option>
     );
   });
-
-  const uniqueInvertersBrand = allInverters
+  const uniqueInvertersBrand = inverters
     .map((e) => e['brand'])
     .map((e, i, final) => final.indexOf(e) === i && i)
     .filter((obj) => allInverters[obj])
     .map((e) => allInverters[e]);
 
-  const inverterModelPrice = inverters
+  function sortinvertes(a, b) {
+    if (a.maxDC < b.maxDC) {
+      return -1;
+    }
+    if (a.maxDC > b.maxDC) {
+      return 1;
+    }
+    return 0;
+  }
+  const inverterModels = inverters
     .filter(
-      (model) => model.brand === inverterProducent && model.phase === phase
+      (model) =>
+        model.brand === inverterProducent &&
+        model.phase === phase &&
+        model.ACpower / 1000 >= truePower
     )
+    .sort(sortinvertes)
     .map((item) => {
       return (
         <option key={item.id} value={item.price}>
-          {item.model}
+          '{item.model}' AC:'{item.ACpower / 1000}' DC'{item.maxDC / 1000}
         </option>
       );
     });
@@ -40,10 +52,10 @@ const Inverter = ({
       <h3>Informacje o falowniu </h3>
       <form
         onClick={(e) => {
-          if (phase === 1) {
-            setPhase(3);
+          if (phase === '1') {
+            setPhase('3');
             e.target.checked = false;
-          } else setPhase(1 * e.target.value);
+          } else setPhase(e.target.value);
         }}
       >
         {truePower <= 3.6 ? (
@@ -77,7 +89,7 @@ const Inverter = ({
         >
           <optgroup label="moduły do wyboru">
             <option value="" selected disabled hidden />
-            {inverterModelPrice}
+            {inverterModels}
           </optgroup>
         </select>
       </div>

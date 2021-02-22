@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { ModulsProvider } from './context/moduls.context';
-import { InvertersProvider } from './context/inverters.context';
-import { ConstructionsProvider } from './context/constructions.context';
-import { InstallationProvider } from './context/installation.context';
-import { ProtectionProvider } from './context/protection.context';
+import { ModulsProvider } from './providers/modulsProvider';
+import { InvertersProvider } from './providers/invertersProvider';
+import { ConstructionsProvider } from './providers/constructionsProvider';
+import { InstallationProvider } from './providers/installationProvider';
+import { ProtectionProvider } from './providers/protectionProvider';
 import HomePage from './Pages/homePage/homePage';
 import SignIn from './components/signIn/signIn';
 import Calculator from './Pages/calculator/calculator';

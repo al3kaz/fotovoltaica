@@ -3,11 +3,11 @@ import React from 'react';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-import { useModuls } from '../context/moduls.context';
-import { useInverters } from '../context/inverters.context';
-import { useConstructions } from '../context/constructions.context';
-import { useInstallation } from '../context/installation.context';
-import { useProtection } from '../context/protection.context';
+import { useModuls } from '../providers/modulsProvider';
+import { useInverters } from '../providers/invertersProvider';
+import { useConstructions } from '../providers/constructionsProvider';
+import { useInstallation } from '../providers/installationProvider';
+import { useProtection } from '../providers/protectionProvider';
 
 const db = firebase.firestore();
 
