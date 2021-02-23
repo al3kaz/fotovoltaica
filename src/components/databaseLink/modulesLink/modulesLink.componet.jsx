@@ -6,6 +6,7 @@ import useFirestoreData from '../../../hooks/useFirestoreData';
 const db = firebase.firestore();
 
 const DatabaseModuls = () => {
+  const [moreInfo, setMoreInfo] = React.useState({});
   const [moduls] = useFirestoreData();
   const [moduleCredentials, setModuleCredentials] = React.useState({
     brand: '',
@@ -88,31 +89,49 @@ const DatabaseModuls = () => {
       [name]: value,
     });
   };
+  const toggleInfoShow = (id) => {
+    setMoreInfo((prevMoreInfo) => ({
+      [id]: !prevMoreInfo[id],
+    }));
+  };
 
   const modulsList = moduls.map((modul) => {
     return (
-      <tr key={modul.model}>
-        <td>{modul.brand}</td>
-        <td>{modul.model}</td>
-        <td>{modul.power}</td>
-        <td>{modul.price}</td>
-        <td>{modul.warranty}</td>
-      </tr>
+      <div
+        onClick={() => {
+          toggleInfoShow(modul.id);
+        }}
+        className="container"
+      >
+        <div className="row">
+          <div className="col mb-2">{modul.brand}</div>
+          <div className="col">{modul.model}</div>
+          <div className="col">{modul.price}</div>
+        </div>
+        {moreInfo[modul.id] ? (
+          <p class="card">
+            <div className="card-body">
+              <h5 className="card-title">{modul.brand}</h5>
+              <h6 className="card-subtitle mb-2 text-muted">{modul.model}</h6>
+              <p className="card-text">{modul.description}</p>
+              <p className="card-text">moc : {modul.power}</p>
+              <p className="card-text">wysokośc : {modul.height}</p>
+              <p className="card-text">szerokość : {modul.width}</p>
+              <p className="card-text">gwarancja : {modul.warranty}</p>
+            </div>
+          </p>
+        ) : null}
+      </div>
     );
   });
-
   return (
     <div>
-      <table className="table table-striped table-hover">
-        <tr className="table-active">
-          <th scope="col">Marka</th>
-          <th scope="col">Model</th>
-          <th scope="col">Moc</th>
-          <th scope="col">Cena</th>
-          <th scope="col">Gwarancja</th>
-        </tr>
-        <tbody>{modulsList}</tbody>
-      </table>
+      <div className="row">
+        <div className="col  mb-2 ">MARKA</div>
+        <div className="col">MODEL</div>
+        <div className="col">CENA</div>
+        {modulsList}
+      </div>
       <form onSubmit={addNewModule}>
         <FormInput
           type="text"
