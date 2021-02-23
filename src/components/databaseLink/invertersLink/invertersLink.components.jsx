@@ -29,7 +29,7 @@ const DatabaseModuls = () => {
         }}
         className="container"
       >
-        <div className="row border-top  border-primary">
+        <div className="row border-top  border-secondary">
           <div className="col m-2">{inverter.brand}</div>
           <div className="col m-2">{inverter.model}</div>
           <div className="col m-2">{(1 * inverter.price).toFixed(2)}</div>
@@ -55,9 +55,9 @@ const DatabaseModuls = () => {
   return (
     <div>
       <div className="row">
-        <div className="col m-2 ">MARKA</div>
-        <div className="col m-2">MODEL</div>
-        <div className="col m-2">CENA</div>
+        <div className="col m-2 fw-bold">MARKA</div>
+        <div className="col m-2 fw-bold">MODEL</div>
+        <div className="col m-2 fw-bold">CENA</div>
         {invertersList}
       </div>
     </div>
