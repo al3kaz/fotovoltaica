@@ -6,12 +6,10 @@ import SearchBar from '../../components/searchBar/searchbar.component';
 import Spinner from '../../components/spinner/spinner';
 const db = firebase.firestore();
 
-
 const Offers = () => {
-  const [search, setSearch] = React.useState("")
+  const [search, setSearch] = React.useState('');
 
   const [clients, setClients] = React.useState();
-
 
   React.useEffect(() => {
     const clientsRef = db.collection('clients');
@@ -23,49 +21,45 @@ const Offers = () => {
       }));
       setClients(data);
     });
-  }, [])
+  }, []);
 
   if (clients === undefined) return <Spinner />;
 
-  const filteredClients = clients.filter((data) => {
-    if (search === null) { return data }
-    else if (
-      data.city.includes(search) ||
-      data.contactSource.includes(search) ||
-      data.email.includes(search) ||
-      data.firstname.includes(search) ||
-      data.houseNumber.includes(search) ||
-      data.pesel.includes(search) ||
-      data.phoneNumber.includes(search) ||
-      data.postalCode.includes(search) ||
-      data.street.includes(search) ||
-      data.surname.includes(search)
-    ) { return data }
-    else return []
-  })
-
-  const buisnessClientsList = filteredClients.filter(client => client.NIP).map((client) => {
-    return (
-      <tr key={client.id}>
-        <td>{client.companyName}</td>
-        <td>{client.NIP}</td>
-        <td>{client.contactPerson}</td>
-        <td>{client.email}</td>
-        <td>{client.phoneNumber}</td>
-      </tr>
+  const lowercasedFilter = search.toLowerCase();
+  const filteredData = clients.filter((item) => {
+    return Object.keys(item).some((key) =>
+      item[key].toLowerCase().includes(lowercasedFilter)
     );
   });
 
-  const individualClientList = filteredClients.filter(clinet => clinet.pesel).map(client => {
-    return (<tr key={client.id}>
-      <td>{client.firstname}</td>
-      <td>{client.surname}</td>
-      <td>{client.email}</td>
-      <td>{client.phoneNumber}</td>
-    </tr>)
-  })
-  console.log(search)
-  console.log(filteredClients)
+  const buisnessClientsList = filteredData
+    .filter((client) => client.NIP)
+    .map((client) => {
+      return (
+        <tr key={client.id}>
+          <td>{client.companyName}</td>
+          <td>{client.NIP}</td>
+          <td>{client.contactPerson}</td>
+          <td>{client.email}</td>
+          <td>{client.phoneNumber}</td>
+        </tr>
+      );
+    });
+
+  const individualClientList = filteredData
+    .filter((client) => client.pesel)
+    .map((client) => {
+      return (
+        <tr key={client.id}>
+          <td>{client.firstname}</td>
+          <td>{client.surname}</td>
+          <td>{client.email}</td>
+          <td>{client.phoneNumber}</td>
+        </tr>
+      );
+    });
+  console.log(search);
+  console.log(filteredData);
   return (
     <div>
       <Navigation />
