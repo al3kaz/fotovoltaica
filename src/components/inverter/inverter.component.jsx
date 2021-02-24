@@ -41,7 +41,7 @@ const Inverter = ({
     .sort(sortInvertes)
     .map((item) => {
       return (
-        <option key={item.id} value={item.price}>
+        <option key={item.id} value={item.id}>
           '{item.model}' AC:'{item.ACpower / 1000}' DC'{item.maxDC / 1000}
         </option>
       );
@@ -84,7 +84,7 @@ const Inverter = ({
         <label className="pe-2">Model falownika</label>
         <select
           onChange={(e) => {
-            setCorrectInverterModelPrice(1 * e.target.value);  
+            setCorrectInverterModelPrice(e.target.value);  
           }}
         >
           <optgroup label="moduły do wyboru">

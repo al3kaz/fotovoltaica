@@ -1,5 +1,5 @@
 import React from 'react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+// import { PDFDownloadLink } from '@react-pdf/renderer';
 import { reducer } from '../../reducerActions/calculatorActions';
 
 import useFirestoreData from '../../hooks/useFirestoreData';
@@ -8,7 +8,7 @@ import Navigation from '../../components/navigation/navigation.component';
 import Modules from '../../components/modules/modules.component';
 import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
-import MyDocument from '../../components/pdfRender/pdfRender.component';
+// import MyDocument from '../../components/pdfRender/pdfRender.component';
 import Spinner from '../../components/spinner/spinner';
 import NewClientForm from '../../components/databaseLink/newClientForm/newClientForm.component';
 
@@ -28,7 +28,7 @@ const Calculator = () => {
     clientInfo: 0,
     phase: '3',
     inverterProducent: '',
-    correctInverterModelPrice: 0,
+    correctInverterModelPrice: '',
     typeOfRoof: 0,
     intallationPrice: 0,
     margins: 0,
@@ -109,10 +109,13 @@ const Calculator = () => {
       } else return 0;
     }
   };
+  const selectedInverter = inverters.filter(item => item.id === state.correctInverterModelPrice)
+  const selectedInverterPrice = (1 * (selectedInverter.map(item => item.price))).toFixed(2)
+  const selectedInverterModel = (selectedInverter.map(item => item.model))
 
   const totalNetPrice =
     state.moduleCount * modulePrice() +
-    state.correctInverterModelPrice +
+    1 * selectedInverterPrice +
     state.moduleCount * state.typeOfRoof +
     truePower * installationPrice() /*koszty AC/DC tutaj*/ +
     protectionCount();
@@ -202,12 +205,17 @@ const Calculator = () => {
       />
       <NewClientForm
         power={truePower}
-        installationType={state.typeOfRoof}
+        installationType={JSON.stringify(state.typeOfRoof)}
         phase={state.phase}
-        moduleCount={state.moduleCount}
+        moduleCount={JSON.stringify(state.moduleCount)}
         module={moduls[state.moduleIndex].model}
+        inverter={selectedInverterModel[0]}
+        netPrice={JSON.stringify(totalNetPrice)}
+        grosPrice={totalGrosPrice}
+        vat={vat}
+        interestVat={JSON.stringify(Math.round((state.clientInfo - 1) * 100))}
       />
-      <PDFDownloadLink
+      {/* <PDFDownloadLink
         className="btn btn-success mb-3"
         document={<MyDocument />}
         fileName="offer.pdf"
@@ -215,7 +223,7 @@ const Calculator = () => {
         {({ blob, url, loading, error }) =>
           loading ? 'Loading document...' : 'Pobierz ofertę'
         }
-      </PDFDownloadLink>
+      </PDFDownloadLink> */}
     </div>
   );
 };

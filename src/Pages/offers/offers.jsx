@@ -58,8 +58,7 @@ const Offers = () => {
         </tr>
       );
     });
-  console.log(search);
-  console.log(filteredData);
+
   return (
     <div>
       <Navigation />

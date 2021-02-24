@@ -5,7 +5,17 @@ import FormInput from '../../form-input/form-input.component';
 
 const db = firebase.firestore();
 
-const NewOfferForm = () => {
+const NewOfferForm = ({ power,
+   installationType,
+   phase,
+   moduleCount,
+   module,
+   inverter,
+   netPrice,
+   grosPrice,
+   vat,
+   interestVat,
+}) => {
    const [typeOfClient, setTypeOfClient] = React.useState()
    const [clientCredentials, setClientCredentials] = React.useState({
       companyName: '',
@@ -55,6 +65,15 @@ const NewOfferForm = () => {
             phoneNumber,
             postalCode,
             street,
+            installationType,
+            phase,
+            moduleCount,
+            module,
+            inverter,
+            netPrice,
+            grosPrice,
+            vat,
+            interestVat
          })
          .then((docRef) => {
             console.log('Document written with ID: ', docRef.id);
@@ -87,7 +106,6 @@ const NewOfferForm = () => {
          [name]: value,
       });
    };
-
    return (
       <div>
          <label>Rodzaj Klienta</label>
