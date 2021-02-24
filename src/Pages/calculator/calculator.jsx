@@ -128,6 +128,7 @@ const Calculator = () => {
   );
 
   const vat = (totalGrosPrice - totalNetPriceWithMargins).toFixed(2);
+
   return (
     <div
       data-test="component-calculator"
@@ -199,11 +200,17 @@ const Calculator = () => {
         vat={vat}
         setMargins={setMargins}
       />
-      <NewClientForm />
+      <NewClientForm
+        power={truePower}
+        installationType={state.typeOfRoof}
+        phase={state.phase}
+        moduleCount={state.moduleCount}
+        module={moduls[state.moduleIndex].model}
+      />
       <PDFDownloadLink
         className="btn btn-success mb-3"
         document={<MyDocument />}
-        fileName="somename.pdf"
+        fileName="offer.pdf"
       >
         {({ blob, url, loading, error }) =>
           loading ? 'Loading document...' : 'Pobierz ofertę'

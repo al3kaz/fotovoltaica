@@ -11,27 +11,36 @@ const HomePage = () => {
 
   React.useEffect(() => {
     const notesRef = db.collection('notes');
+    if (notes.length === 1) {
+      notesRef.get().then((snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const fetchedNotes = JSON.parse(data.map(item => item.newNotes))
+        console.log('aktualny stan', notes)
+        console.log('stan  firebase', fetchedNotes)
+        const twoArr = [...notes, ...fetchedNotes]
+        console.log('połączenie stanu komponentu ze stanem firebase', twoArr)
+        // setNotes(twoArr)
+      });
 
-    notesRef.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      const newNotes = data.newArr;
-      console.log(newNotes);
-    }, []);
-  });
+    }
+  }, [notes]);
 
   const onChange = (notes) => {
     setNotes(notes);
   };
-  const newArr = JSON.stringify(notes);
 
-  const newNotes = { newArr };
+  const newNotes = JSON.stringify(notes);
+  // console.log('stan strigifi', newNotes)
+
+  const firebaseNotes = { newNotes };
+  // console.log('zamiania stringifi na obiekt do wysłania na firebase', firebaseNotes)
 
   const addNotesToFirebase = () => {
     db.collection('notes')
-      .add(newNotes)
+      .add(firebaseNotes)
       .then((docRef) => {
         console.log('Document written with ID: ', docRef.id);
       })
@@ -39,12 +48,11 @@ const HomePage = () => {
         console.error('Error adding document: ', error);
       });
   };
-
   return (
     <div>
       <Navigation />
       <ReactStickies notes={notes} onChange={onChange} />
-      <button onClick={addNotesToFirebase}>ok</button>
+      {/* <button onClick={addNotesToFirebase}>ok</button> */}
     </div>
   );
 };

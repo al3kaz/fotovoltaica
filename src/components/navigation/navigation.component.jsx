@@ -8,7 +8,12 @@ const Navigation = () => {
       <div className="d-flex flex-column bd-highlight m-3">
         <ul className="nav nav-pills">
           <li className="nav-item">
-            <NavLink className="nav-link" aria-current="page" to="/calculator">
+            <NavLink className="nav-link" exact to="/">
+              Start
+            </NavLink>
+          </li>
+          <li>
+            <NavLink className="nav-link" to="/calculator">
               Kalkulator
             </NavLink>
           </li>
@@ -35,7 +40,7 @@ const Navigation = () => {
           </li>
         </ul>
       </div>
-    </nav>
+    </nav >
   );
 };
 
