@@ -19,7 +19,7 @@ const App = () => {
   if (user.user === undefined) return <SignIn />;
 
   return (
-    <div className="container">
+    <div className="container justify-content-center">
       <Switch>
         <InvertersProvider>
           <ModulsProvider>

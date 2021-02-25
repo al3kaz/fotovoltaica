@@ -7,7 +7,7 @@ const Inverter = ({
   setPhase,
   inverterProducent,
   setInverterProducent,
-  setCorrectInverterModelPrice,
+  setCorrectInverterModelId,
 }) => {
   const allInverters = inverters.map((item) => {
     return (
@@ -48,8 +48,7 @@ const Inverter = ({
     });
 
   return (
-    <div className="d-flex flex-column bd-highlight m-3 ">
-      <h3>Informacje o falowniu </h3>
+    <div className="d-flex flex-column bd-highlight m-3">
       <form
         onClick={(e) => {
           if (phase === '1') {
@@ -84,7 +83,7 @@ const Inverter = ({
         <label className="pe-2">Model falownika</label>
         <select
           onChange={(e) => {
-            setCorrectInverterModelPrice(e.target.value);  
+            setCorrectInverterModelId(e.target.value);
           }}
         >
           <optgroup label="moduły do wyboru">

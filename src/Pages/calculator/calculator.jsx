@@ -1,5 +1,4 @@
 import React from 'react';
-// import { PDFDownloadLink } from '@react-pdf/renderer';
 import { reducer } from '../../reducerActions/calculatorActions';
 
 import useFirestoreData from '../../hooks/useFirestoreData';
@@ -8,7 +7,6 @@ import Navigation from '../../components/navigation/navigation.component';
 import Modules from '../../components/modules/modules.component';
 import Inverter from '../../components/inverter/inverter.component';
 import TotalPrice from '../../components/totalPrice/totalPrice.component';
-// import MyDocument from '../../components/pdfRender/pdfRender.component';
 import Spinner from '../../components/spinner/spinner';
 import NewClientForm from '../../components/databaseLink/newClientForm/newClientForm.component';
 
@@ -28,7 +26,7 @@ const Calculator = () => {
     clientInfo: 0,
     phase: '3',
     inverterProducent: '',
-    correctInverterModelPrice: '',
+    correctInverterModelId: '',
     typeOfRoof: 0,
     intallationPrice: 0,
     margins: 0,
@@ -62,10 +60,10 @@ const Calculator = () => {
   const setInverterProducent = (inverterProducent) =>
     dispatch({ type: 'setInverterProducent', payload: inverterProducent });
 
-  const setCorrectInverterModelPrice = (correctInverterModelPrice) =>
+  const setCorrectInverterModelId = (correctInverterModelId) =>
     dispatch({
-      type: 'setCorrectInverterModelPrice',
-      payload: correctInverterModelPrice,
+      type: 'setCorrectInverterModelId',
+      payload: correctInverterModelId,
     });
 
   const setTypeOfRoof = (typeOfRoof) =>
@@ -109,9 +107,13 @@ const Calculator = () => {
       } else return 0;
     }
   };
-  const selectedInverter = inverters.filter(item => item.id === state.correctInverterModelPrice)
-  const selectedInverterPrice = (1 * (selectedInverter.map(item => item.price))).toFixed(2)
-  const selectedInverterModel = (selectedInverter.map(item => item.model))
+  const selectedInverter = inverters.filter(
+    (item) => item.id === state.correctInverterModelId
+  );
+  const selectedInverterPrice = (
+    1 * selectedInverter.map((item) => item.price)
+  ).toFixed(2);
+  const selectedInverterModel = selectedInverter.map((item) => item.model);
 
   const totalNetPrice =
     state.moduleCount * modulePrice() +
@@ -156,8 +158,10 @@ const Calculator = () => {
           setTypeOfRoof={setTypeOfRoof}
           setModuleIndex={setModuleIndex}
         />
-        <p className="fw-bold">moc : {isNaN(truePower) ? '' : truePower} kWp</p>
         <div className="m-2">
+          <p className="fw-bold">
+            moc : {isNaN(truePower) ? '' : truePower} kWp
+          </p>
           <label className="pe-2">liczba modułów</label>
           <button
             className="btn btn-light btn-sm mx-1"
@@ -195,7 +199,7 @@ const Calculator = () => {
         setPhase={setPhase}
         inverterProducent={state.inverterProducent}
         setInverterProducent={setInverterProducent}
-        setCorrectInverterModelPrice={setCorrectInverterModelPrice}
+        setCorrectInverterModelId={setCorrectInverterModelId}
       />
       <TotalPrice
         totalNetPriceWithMargins={totalNetPriceWithMargins}
@@ -204,26 +208,17 @@ const Calculator = () => {
         setMargins={setMargins}
       />
       <NewClientForm
-        power={truePower}
+        power={JSON.stringify(truePower)}
         installationType={JSON.stringify(state.typeOfRoof)}
         phase={state.phase}
         moduleCount={JSON.stringify(state.moduleCount)}
         module={moduls[state.moduleIndex].model}
         inverter={selectedInverterModel[0]}
-        netPrice={JSON.stringify(totalNetPrice)}
+        netPrice={JSON.stringify(totalNetPriceWithMargins)}
         grosPrice={totalGrosPrice}
         vat={vat}
         interestVat={JSON.stringify(Math.round((state.clientInfo - 1) * 100))}
       />
-      {/* <PDFDownloadLink
-        className="btn btn-success mb-3"
-        document={<MyDocument />}
-        fileName="offer.pdf"
-      >
-        {({ blob, url, loading, error }) =>
-          loading ? 'Loading document...' : 'Pobierz ofertę'
-        }
-      </PDFDownloadLink> */}
     </div>
   );
 };

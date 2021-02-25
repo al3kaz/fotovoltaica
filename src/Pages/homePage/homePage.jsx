@@ -17,14 +17,13 @@ const HomePage = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        const fetchedNotes = JSON.parse(data.map(item => item.newNotes))
-        console.log('aktualny stan', notes)
-        console.log('stan  firebase', fetchedNotes)
-        const twoArr = [...notes, ...fetchedNotes]
-        console.log('połączenie stanu komponentu ze stanem firebase', twoArr)
+        const fetchedNotes = JSON.parse(data.map((item) => item.newNotes));
+        console.log('aktualny stan', notes);
+        console.log('stan  firebase', fetchedNotes);
+        const twoArr = [...notes, ...fetchedNotes];
+        console.log('połączenie stanu komponentu ze stanem firebase', twoArr);
         // setNotes(twoArr)
       });
-
     }
   }, [notes]);
 
@@ -49,11 +48,11 @@ const HomePage = () => {
       });
   };
   return (
-    <div>
+    <>
       <Navigation />
       <ReactStickies notes={notes} onChange={onChange} />
       {/* <button onClick={addNotesToFirebase}>ok</button> */}
-    </div>
+    </>
   );
 };
 

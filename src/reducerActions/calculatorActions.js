@@ -12,8 +12,8 @@ export function reducer(state, action) {
       return { ...state, phase: action.payload };
     case 'setInverterProducent':
       return { ...state, inverterProducent: action.payload };
-    case 'setCorrectInverterModelPrice':
-      return { ...state, correctInverterModelPrice: action.payload };
+    case 'setCorrectInverterModelId':
+      return { ...state, correctInverterModelId: action.payload };
     case 'setTypeOfRoof':
       return { ...state, typeOfRoof: action.payload };
     case 'setMargins':

@@ -57,7 +57,7 @@ const DatabaseModuls = () => {
       <div className="row">
         <div className="col m-2 fw-bold">MARKA</div>
         <div className="col m-2 fw-bold">MODEL</div>
-        <div className="col m-2 fw-boldcd ka  ">CENA</div>
+        <div className="col m-2 fw-bold">CENA</div>
         {invertersList}
       </div>
     </div>

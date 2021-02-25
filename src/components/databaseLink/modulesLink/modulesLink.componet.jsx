@@ -103,10 +103,10 @@ const DatabaseModuls = () => {
         }}
         className="container"
       >
-        <div className="row">
+        <div className="row border-top  border-secondary">
           <div className="col mb-2">{modul.brand}</div>
-          <div className="col">{modul.model}</div>
-          <div className="col">{modul.price}</div>
+          <div className="col m-2">{modul.model}</div>
+          <div className="col m-2">{modul.price}</div>
         </div>
         {moreInfo[modul.id] ? (
           <p class="card">
@@ -127,9 +127,9 @@ const DatabaseModuls = () => {
   return (
     <div>
       <div className="row">
-        <div className="col  mb-2 ">MARKA</div>
-        <div className="col">MODEL</div>
-        <div className="col">CENA</div>
+        <div className="col m-2 fw-bold">MARKA</div>
+        <div className="col m-2 fw-bold">MODEL</div>
+        <div className="col m-2 fw-bold">CENA</div>
         {modulsList}
       </div>
       <form onSubmit={addNewModule}>

@@ -32,7 +32,7 @@ const Modules = ({
   };
 
   return (
-    <div className="d-flex flex-column bd-highlight m-3">
+    <>
       <div className="m-2">
         <label className="pe-2">moduł</label>
         <select
@@ -58,7 +58,7 @@ const Modules = ({
           </optgroup>
         </select>
       </div>
-    </div>
+    </>
   );
 };
 
