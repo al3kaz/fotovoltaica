@@ -22,7 +22,7 @@ const HomePage = () => {
         console.log('stan  firebase', fetchedNotes);
         const twoArr = [...notes, ...fetchedNotes];
         console.log('połączenie stanu komponentu ze stanem firebase', twoArr);
-        // setNotes(twoArr)
+        // setNotes(twoArr);
       });
     }
   }, [notes]);
@@ -47,6 +47,7 @@ const HomePage = () => {
         console.error('Error adding document: ', error);
       });
   };
+  console.log(notes);
   return (
     <>
       <Navigation />

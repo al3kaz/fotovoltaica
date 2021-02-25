@@ -23,10 +23,10 @@ const Inverter = ({
     .map((e) => allInverters[e]);
 
   function sortInvertes(a, b) {
-    if (a.maxDC < b.maxDC) {
+    if (1 * a.maxDC < 1 * b.maxDC) {
       return -1;
     }
-    if (a.maxDC > b.maxDC) {
+    if (1 * a.maxDC > 1 * b.maxDC) {
       return 1;
     }
     return 0;
@@ -87,7 +87,7 @@ const Inverter = ({
           }}
         >
           <optgroup label="moduły do wyboru">
-            <option value="" selected disabled hidden />
+            {/* <option value="" selected disabled hidden /> */}
             {inverterModels}
           </optgroup>
         </select>
