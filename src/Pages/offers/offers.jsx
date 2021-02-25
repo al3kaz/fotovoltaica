@@ -68,16 +68,22 @@ const Offers = () => {
                   <h6 className="card-subtitle mx-2 text-muted">
                     {client.NIP}
                   </h6>
-                  <p className="card-text">{client.contactPerson}</p>
-                  <p className="card-text">nr telefonu{client.phoneNumber}</p>
-                  <p className="card-text">kod pocztowy {client.postalCode}</p>
-                  <p className="card-text">miasto {client.city}</p>
-                  <p className="card-text">moc : {client.power}</p>
-                  <p className="card-text">cena netto{client.netPrice} pln</p>
-                  <p className="card-text">vat{client.vat} pln</p>
-                  <p className="card-text">cena brutto{client.grosPrice} pln</p>
-                  <p className="card-text">{client.module}</p>
-                  <p className="card-text">{client.inverter} </p>
+                  <p className="card-text">
+                    osoba kontaktowa :{client.contactPerson}
+                  </p>
+                  <p className="card-text">nr telefonu :{client.phoneNumber}</p>
+                  <p className="card-text">kod pocztowy :{client.postalCode}</p>
+                  <p className="card-text">miasto :{client.city}</p>
+                  <p className="card-text">moc instalacji :{client.power}</p>
+                  <p className="card-text">cena netto :{client.netPrice} pln</p>
+                  <p className="card-text">vat :{client.vat} pln</p>
+                  <p className="card-text">
+                    cena brutto :{client.grosPrice} pln
+                  </p>
+                  <p className="card-text">model modułu :{client.module}</p>
+                  <p className="card-text">
+                    model falownika :{client.inverter}{' '}
+                  </p>
                 </div>
               </div>
               <PDFViewer>
@@ -122,10 +128,11 @@ const Offers = () => {
                     {client.surname}
                   </h6>
                   <p className="card-text">
+                    ul.
                     {client.street}
                     {client.houseNumber}
                   </p>
-                  <p className="card-text">{client.postalCode}</p>
+                  <p className="card-text">kod pocztowy :{client.postalCode}</p>
                   <p className="card-text">{client.city}</p>
                   <p className="card-text">moc : {client.power}</p>
                   <p className="card-text">{client.grosPrice} pln</p>
