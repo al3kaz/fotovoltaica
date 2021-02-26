@@ -8,51 +8,57 @@ const db = firebase.firestore();
 
 const HomePage = () => {
   const [notes, setNotes] = React.useState([]);
+  const [fbNotes, setFbNotes] = React.useState([]);
 
   React.useEffect(() => {
     const notesRef = db.collection('notes');
-    if (notes.length === 1) {
-      notesRef.get().then((snapshot) => {
-        const data = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        const fetchedNotes = JSON.parse(data.map((item) => item.newNotes));
-        console.log('aktualny stan', notes);
-        console.log('stan  firebase', fetchedNotes);
-        const twoArr = [...notes, ...fetchedNotes];
-        console.log('połączenie stanu komponentu ze stanem firebase', twoArr);
-        // setNotes(twoArr);
+    notesRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      if (data.length === 0) return null;
+      const newNotes = data.map((item) => {
+        item.note.grid = JSON.parse(item.note.grid);
+        return item.note;
       });
-    }
-  }, [notes]);
+      setNotes([...notes, ...newNotes]);
+      setFbNotes(newNotes);
+    });
+  }, []);
 
   const onChange = (notes) => {
     setNotes(notes);
   };
 
-  const newNotes = JSON.stringify(notes);
-  // console.log('stan strigifi', newNotes)
-
-  const firebaseNotes = { newNotes };
-  // console.log('zamiania stringifi na obiekt do wysłania na firebase', firebaseNotes)
-
   const addNotesToFirebase = () => {
-    db.collection('notes')
-      .add(firebaseNotes)
-      .then((docRef) => {
-        console.log('Document written with ID: ', docRef.id);
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
+    notes
+      .filter((id) => !fbNotes.includes(id))
+      .map((note) => {
+        delete note.editorState;
+        note.grid = JSON.stringify(note.grid);
+        console.log(note);
+        db.collection('notes')
+          .add({ note })
+          .then((docRef) => {
+            console.log('Document written with ID: ', docRef.id);
+          })
+          .catch((error) => {
+            console.error('Error adding document: ', error);
+          });
       });
   };
-  console.log(notes);
+
   return (
     <>
       <Navigation />
+      <button
+        className="btn btn-light btn-sm mx-1"
+        onClick={addNotesToFirebase}
+      >
+        dodaj notatki
+      </button>
       <ReactStickies notes={notes} onChange={onChange} />
-      {/* <button onClick={addNotesToFirebase}>ok</button> */}
     </>
   );
 };
