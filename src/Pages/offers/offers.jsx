@@ -140,12 +140,14 @@ const Offers = () => {
                   <p className="card-text">{client.inverter} </p>
                 </div>
               </div>
-              <PDFViewer>
-                <MyDocument />
-              </PDFViewer>
               <PDFDownloadLink
                 className="card-link"
-                document={<MyDocument />}
+                document={
+                  <MyDocument
+                    name={client.firstname}
+                    surname={client.surname}
+                  />
+                }
                 fileName="offer.pdf"
               >
                 {({ blob, url, loading, error }) =>
