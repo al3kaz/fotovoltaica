@@ -3,7 +3,9 @@ import { Link, NavLink } from 'react-router-dom';
 import { auth } from '../../firebase';
 
 const Navigation = () => {
+
   return (
+
     <div className="sticky-top m-3">
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid justify-content-center">

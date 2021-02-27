@@ -28,6 +28,7 @@ const HomePage = () => {
   }, []);
 
   const onChange = (notes) => {
+    console.log('zmiana')
     setNotes(notes);
   };
 
@@ -37,11 +38,9 @@ const HomePage = () => {
       .map((note) => {
         delete note.editorState;
         note.grid = JSON.stringify(note.grid);
-        console.log(note);
-        db.collection('notes')
-          .add({ note })
+        db.collection('notes').doc(`${note.id}`).set({ note })
           .then((docRef) => {
-            console.log('Document written with ID: ', docRef.id);
+            console.log('Document written with ID: ', note.id);
           })
           .catch((error) => {
             console.error('Error adding document: ', error);
@@ -49,16 +48,24 @@ const HomePage = () => {
       });
   };
 
+  const deleteNoteFromFirebase = (e) => {
+    db.collection("notes").doc(`${e.id}`).delete().then(() => {
+      console.log("Document successfully deleted!");
+    }).catch((error) => {
+      console.error("Error removing document: ", error);
+    });
+  }
+
   return (
     <>
       <Navigation />
       <button
-        className="btn btn-light btn-sm mx-1"
+        className="btn btn-dark btn-sm mx-1"
         onClick={addNotesToFirebase}
       >
-        dodaj notatki
+        dodaj notki
       </button>
-      <ReactStickies notes={notes} onChange={onChange} />
+      <ReactStickies notes={notes} onChange={onChange} onDelete={deleteNoteFromFirebase} />
     </>
   );
 };
