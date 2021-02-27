@@ -23,10 +23,10 @@ const Inverter = ({
     .map((e) => allInverters[e]);
 
   function sortInvertes(a, b) {
-    if (1 * a.maxDC < 1 * b.maxDC) {
+    if (1 * a.ACpower < 1 * b.ACpower) {
       return -1;
     }
-    if (1 * a.maxDC > 1 * b.maxDC) {
+    if (1 * a.ACpower > 1 * b.ACpower) {
       return 1;
     }
     return 0;
@@ -36,7 +36,7 @@ const Inverter = ({
       (model) =>
         model.brand === inverterProducent &&
         model.phase === phase &&
-        model.ACpower / 1000 >= truePower
+        model.maxDC / 1000 >= truePower
     )
     .sort(sortInvertes)
     .map((item) => {
