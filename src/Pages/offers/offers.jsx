@@ -1,43 +1,26 @@
-import BuisnessClientsList from '../../components/buisnessClientsList/buisnessClientsList.component';
 import React from 'react';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import Navigation from '../../components/navigation/navigation.component';
-import SearchBar from '../../components/searchBar/searchbar.component';
-import Spinner from '../../components/spinner/spinner';
-import IndividualClientList from '../../components/individualClientList/individualClientList.component';
-
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import { StyledTableCell, useStyles } from './offers.style';
+import {
+  BuisnessClientsList,
+  Navigation,
+  SearchBar,
+  Spinner,
+  IndividualClientList,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from './index';
 
 const db = firebase.firestore();
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 700,
-  },
-});
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
 
 const Offers = () => {
   const [clients, setClients] = React.useState();
   const [search, setSearch] = React.useState('');
-
   const classes = useStyles();
 
   React.useEffect(() => {

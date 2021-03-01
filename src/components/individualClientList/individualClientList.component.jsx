@@ -1,18 +1,20 @@
 import React from 'react';
 
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import MyDocument from '../../components/pdfRender/pdfRender.component';
-
-import { useTheme } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Button from '@material-ui/core/Button';
-import { Alert } from '@material-ui/lab';
-import { StyledTableCell, StyledTableRow } from './individualClientList.style';
+import {
+  PDFDownloadLink,
+  MyDocument,
+  useTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  useMediaQuery,
+  Button,
+  Alert,
+  StyledTableCell,
+  StyledTableRow,
+} from './index';
 
 const IndividualClientList = ({ filteredClients }) => {
   const [moreInfo, setMoreInfo] = React.useState({});
@@ -35,98 +37,98 @@ const IndividualClientList = ({ filteredClients }) => {
     }));
   };
 
-  return filteredClients.length === 0 ? (
-    <Alert severity="warning">This is a warning alert — check it out!</Alert>
-  ) : (
-    filteredClients
-      .filter((client) => client.pesel)
-      .map((client) => {
-        return (
-          <StyledTableRow
-            onClick={() => {
-              handleClickOpen();
-              toggleInfoShow(client.id);
-            }}
-            key={client.id}
-            className="row border-top"
-          >
-            <StyledTableCell component="th" scope="row">
-              {client.firstname}
-            </StyledTableCell>
-            <StyledTableCell align="right">{client.surname}</StyledTableCell>
-            <StyledTableCell align="right">{client.email}</StyledTableCell>
-            <StyledTableCell align="right">
-              {client.phoneNumber}
-            </StyledTableCell>
+  const filteredIndividualClients = filteredClients.filter(
+    (client) => client.pesel
+  );
 
-            {moreInfo[client.id] ? (
-              <>
-                <Dialog
-                  fullScreen={fullScreen}
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="responsive-dialog-title"
-                >
-                  <DialogTitle id="responsive-dialog-title">
-                    {client.firstname} {client.surname}
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText>PESEL: {client.pesel}</DialogContentText>
-                    <DialogContentText>
-                      telefon: {client.phoneNumber}
-                    </DialogContentText>
-                    <DialogContentText>email: {client.email}</DialogContentText>
-                    <DialogContentText>
-                      ul.
-                      {client.street}
-                      {client.houseNumber} {client.postalCode}, {client.city}
-                    </DialogContentText>
-                    <DialogContentText>
-                      skąd o nas wiesz ? :{client.contactSours}
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogContent>
-                    <DialogContentText>
-                      moc instalacji :{client.power} kWp
-                    </DialogContentText>
-                    <DialogContentText>
-                      Moduł: {client.module} kWp {client.moduleCount}szt.
-                    </DialogContentText>
-                    <DialogContentText>
-                      falownik: {client.inverter} kWp
-                    </DialogContentText>
-                    <DialogContentText>
-                      cena netto: {client.netPrice} zł
-                    </DialogContentText>
-                    <DialogContentText>vat: {client.vat} zł</DialogContentText>
-                    <DialogContentText>
-                      cena brutton: {client.grosPrice} zł
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                      <PDFDownloadLink
-                        className="card-link"
-                        document={
-                          <MyDocument
-                            name={client.firstname}
-                            surname={client.surname}
-                          />
-                        }
-                        fileName="offer.pdf"
-                      >
-                        {({ blob, url, loading, error }) =>
-                          loading ? 'Loading document...' : 'Pobierz ofertę'
-                        }
-                      </PDFDownloadLink>
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </>
-            ) : null}
-          </StyledTableRow>
-        );
-      })
+  return filteredIndividualClients.length === 0 ? (
+    <Alert severity="warning">Brak wyników wyszukiwania</Alert>
+  ) : (
+    filteredIndividualClients.map((client) => {
+      return (
+        <StyledTableRow
+          onClick={() => {
+            handleClickOpen();
+            toggleInfoShow(client.id);
+          }}
+          key={client.id}
+          className="row border-top"
+        >
+          <StyledTableCell component="th" scope="row">
+            {client.firstname}
+          </StyledTableCell>
+          <StyledTableCell align="right">{client.surname}</StyledTableCell>
+          <StyledTableCell align="right">{client.email}</StyledTableCell>
+          <StyledTableCell align="right">{client.phoneNumber}</StyledTableCell>
+
+          {moreInfo[client.id] ? (
+            <>
+              <Dialog
+                fullScreen={fullScreen}
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="responsive-dialog-title"
+              >
+                <DialogTitle id="responsive-dialog-title">
+                  {client.firstname} {client.surname}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>PESEL: {client.pesel}</DialogContentText>
+                  <DialogContentText>
+                    telefon: {client.phoneNumber}
+                  </DialogContentText>
+                  <DialogContentText>email: {client.email}</DialogContentText>
+                  <DialogContentText>
+                    ul.
+                    {client.street}
+                    {client.houseNumber} {client.postalCode}, {client.city}
+                  </DialogContentText>
+                  <DialogContentText>
+                    skąd o nas wiesz ? :{client.contactSours}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogContent>
+                  <DialogContentText>
+                    moc instalacji :{client.power} kWp
+                  </DialogContentText>
+                  <DialogContentText>
+                    Moduł: {client.module} kWp {client.moduleCount}szt.
+                  </DialogContentText>
+                  <DialogContentText>
+                    falownik: {client.inverter} kWp
+                  </DialogContentText>
+                  <DialogContentText>
+                    cena netto: {client.netPrice} zł
+                  </DialogContentText>
+                  <DialogContentText>vat: {client.vat} zł</DialogContentText>
+                  <DialogContentText>
+                    cena brutton: {client.grosPrice} zł
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    <PDFDownloadLink
+                      className="card-link"
+                      document={
+                        <MyDocument
+                          name={client.firstname}
+                          surname={client.surname}
+                        />
+                      }
+                      fileName="offer.pdf"
+                    >
+                      {({ blob, url, loading, error }) =>
+                        loading ? 'Loading document...' : 'Pobierz ofertę'
+                      }
+                    </PDFDownloadLink>
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </>
+          ) : null}
+        </StyledTableRow>
+      );
+    })
   );
 };
 

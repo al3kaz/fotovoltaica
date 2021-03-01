@@ -28,7 +28,7 @@ const HomePage = () => {
   }, []);
 
   const onChange = (notes) => {
-    console.log('zmiana')
+    console.log('zmiana');
     setNotes(notes);
   };
 
@@ -38,7 +38,9 @@ const HomePage = () => {
       .map((note) => {
         delete note.editorState;
         note.grid = JSON.stringify(note.grid);
-        db.collection('notes').doc(`${note.id}`).set({ note })
+        db.collection('notes')
+          .doc(`${note.id}`)
+          .set({ note })
           .then((docRef) => {
             console.log('Document written with ID: ', note.id);
           })
@@ -49,23 +51,30 @@ const HomePage = () => {
   };
 
   const deleteNoteFromFirebase = (e) => {
-    db.collection("notes").doc(`${e.id}`).delete().then(() => {
-      console.log("Document successfully deleted!");
-    }).catch((error) => {
-      console.error("Error removing document: ", error);
-    });
-  }
+    db.collection('notes')
+      .doc(`${e.id}`)
+      .delete()
+      .then(() => {
+        console.log('Document successfully deleted!');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+  };
 
   return (
     <>
       <Navigation />
-      <button
-        className="btn btn-dark btn-sm mx-1"
-        onClick={addNotesToFirebase}
-      >
-        dodaj notki
-      </button>
-      <ReactStickies notes={notes} onChange={onChange} onDelete={deleteNoteFromFirebase} />
+      <div className="flex d-flex flex-column align-items-center">
+        <button className="btn btn-dark btn-sm " onClick={addNotesToFirebase}>
+          dodaj notki
+        </button>
+      </div>
+      <ReactStickies
+        notes={notes}
+        onChange={onChange}
+        onDelete={deleteNoteFromFirebase}
+      />
     </>
   );
 };

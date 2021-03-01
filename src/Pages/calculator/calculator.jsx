@@ -1,14 +1,14 @@
 import React from 'react';
-import { reducer } from '../../reducerActions/calculatorActions';
-
-import useFirestoreData from '../../hooks/useFirestoreData';
-
-import Navigation from '../../components/navigation/navigation.component';
-import Modules from '../../components/modules/modules.component';
-import Inverter from '../../components/inverter/inverter.component';
-import TotalPrice from '../../components/totalPrice/totalPrice.component';
-import Spinner from '../../components/spinner/spinner';
-import NewClientForm from '../../components/databaseLink/newClientForm/newClientForm.component';
+import {
+  reducer,
+  useFirestoreData,
+  Navigation,
+  Modules,
+  Inverter,
+  TotalPrice,
+  Spinner,
+  NewClientForm,
+} from './index';
 
 const Calculator = () => {
   const [
@@ -132,7 +132,10 @@ const Calculator = () => {
     2
   );
 
-  const vat = (totalGrosPrice - totalNetPriceWithMargins).toFixed(2);
+  const vat = () => {
+    if (totalGrosPrice == 0) return null;
+    else return (totalGrosPrice - totalNetPriceWithMargins).toFixed(2);
+  };
 
   return (
     <div
@@ -204,7 +207,7 @@ const Calculator = () => {
       <TotalPrice
         totalNetPriceWithMargins={totalNetPriceWithMargins}
         totalGrosPrice={totalGrosPrice}
-        vat={vat}
+        vat={vat()}
         setMargins={setMargins}
       />
       <NewClientForm
@@ -216,7 +219,7 @@ const Calculator = () => {
         inverter={selectedInverterModel[0]}
         netPrice={JSON.stringify(totalNetPriceWithMargins)}
         grosPrice={totalGrosPrice}
-        vat={vat}
+        vat={vat()}
         interestVat={JSON.stringify(Math.round((state.clientInfo - 1) * 100))}
       />
     </div>

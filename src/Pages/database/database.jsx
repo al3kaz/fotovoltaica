@@ -1,12 +1,14 @@
 import React from 'react';
 import { NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
-import ModulesLink from '../../components/databaseLink/modulesLink/modulesLink.componet';
-import invertersLink from '../../components/databaseLink/invertersLink/invertersLink.components';
-import Navigation from '../../components/navigation/navigation.component';
-import AcDcLink from '../../components/databaseLink/AcDcLink/AcDcLink.component';
-import InstallationLink from '../../components/databaseLink/installationLink/installationLink.component';
-import ConstructionLink from '../../components/databaseLink/constructionsLink/contructionsLink.components';
-import ProtectionLink from '../../components/databaseLink/protectionLink/protectionLink.component';
+import {
+  ModuleView,
+  InvertersView,
+  Navigation,
+  AcDcView,
+  InstallationView,
+  ConstructionView,
+  ProtectionView,
+} from './index';
 
 const Database = () => {
   let { path, url } = useRouteMatch();
@@ -50,12 +52,12 @@ const Database = () => {
       </div>
 
       <Switch>
-        <Route path={`${path}/modules`} component={ModulesLink} />
-        <Route path={`${path}/inverters`} component={invertersLink} />
-        <Route path={`${path}/constructions`} component={ConstructionLink} />
-        <Route path={`${path}/installation`} component={InstallationLink} />
-        <Route path={`${path}/ppoz`} component={ProtectionLink} />
-        <Route path={`${path}/ac/dc`} component={AcDcLink} />
+        <Route path={`${path}/modules`} component={ModuleView} />
+        <Route path={`${path}/inverters`} component={InvertersView} />
+        <Route path={`${path}/constructions`} component={ConstructionView} />
+        <Route path={`${path}/installation`} component={InstallationView} />
+        <Route path={`${path}/ppoz`} component={ProtectionView} />
+        <Route path={`${path}/ac/dc`} component={AcDcView} />
       </Switch>
     </>
   );

@@ -86,10 +86,7 @@ const Inverter = ({
             setCorrectInverterModelId(e.target.value);
           }}
         >
-          <optgroup label="moduły do wyboru">
-            {/* <option value="" selected disabled hidden /> */}
-            {inverterModels}
-          </optgroup>
+          <optgroup label="moduły do wyboru">{inverterModels}</optgroup>
         </select>
       </div>
     </div>
