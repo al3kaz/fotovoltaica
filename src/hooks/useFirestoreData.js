@@ -63,6 +63,6 @@ const useFirestoreData = () => {
     });
   }, []);
 
-  return [moduls, inverters, constructions, installation, protection];
+  return { moduls, inverters, constructions, installation, protection };
 };
 export default useFirestoreData;

@@ -7,7 +7,7 @@ const db = firebase.firestore();
 
 const DatabaseModuls = () => {
   const [moreInfo, setMoreInfo] = React.useState({});
-  const [moduls] = useFirestoreData();
+  const { moduls } = useFirestoreData();
   const [moduleCredentials, setModuleCredentials] = React.useState({
     brand: '',
     datasheet: '',

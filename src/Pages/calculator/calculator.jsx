@@ -11,13 +11,13 @@ import {
 } from './index';
 
 const Calculator = () => {
-  const [
+  const {
     moduls,
     inverters,
     constructions,
     installation,
     protection,
-  ] = useFirestoreData();
+  } = useFirestoreData();
 
   const [state, dispatch] = React.useReducer(reducer, {
     requestedPower: 0,

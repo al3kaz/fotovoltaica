@@ -3,7 +3,7 @@ import useFirestoreData from '../../../hooks/useFirestoreData';
 
 const DatabaseModuls = () => {
   const [moreInfo, setMoreInfo] = React.useState({});
-  const [modules, inverters] = useFirestoreData();
+  const { inverters } = useFirestoreData();
 
   function sortinvertes(a, b) {
     if (a.brand < b.brand) {
