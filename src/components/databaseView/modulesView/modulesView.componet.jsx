@@ -1,94 +1,11 @@
 import React from 'react';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import FormInput from '../../form-input/form-input.component';
 import useFirestoreData from '../../../hooks/useFirestoreData';
-const db = firebase.firestore();
+import AddToFirestore from '../../../CSVToFirestore/AddToFirestore';
 
 const DatabaseModuls = () => {
   const [moreInfo, setMoreInfo] = React.useState({});
   const { moduls } = useFirestoreData();
-  const [moduleCredentials, setModuleCredentials] = React.useState({
-    brand: '',
-    datasheet: '',
-    description: '',
-    model: '',
-    height: '',
-    width: '',
-    power: '',
-    powerWarranty: '',
-    warranty: '',
-    price: '',
-    available: false,
-    blackframe: false,
-    fullblack: false,
-  });
-  const {
-    brand,
-    datasheet,
-    description,
-    model,
-    height,
-    width,
-    power,
-    powerWarranty,
-    warranty,
-    price,
-    available,
-    blackframe,
-    fullblack,
-  } = moduleCredentials;
 
-  const addNewModule = (e) => {
-    e.preventDefault();
-    db.collection('moduls')
-      .add({
-        available,
-        blackframe,
-        brand,
-        datasheet,
-        description,
-        fullblack,
-        height,
-        model,
-        power,
-        powerWarranty,
-        price,
-        warranty,
-        width,
-      })
-      .then((docRef) => {
-        console.log('Document written with ID: ', docRef.id);
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      });
-
-    setModuleCredentials({
-      brand: '',
-      datasheet: '',
-      description: '',
-      model: '',
-      height: '',
-      width: '',
-      power: '',
-      powerWarranty: '',
-      warranty: '',
-      price: '',
-      available: false,
-      blackframe: false,
-      fullblack: false,
-    });
-    return alert('dodałes nowy moduł');
-  };
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    setModuleCredentials({
-      ...moduleCredentials,
-      [name]: value,
-    });
-  };
   const toggleInfoShow = (id) => {
     setMoreInfo((prevMoreInfo) => ({
       [id]: !prevMoreInfo[id],
@@ -97,20 +14,20 @@ const DatabaseModuls = () => {
 
   const modulsList = moduls.map((modul) => {
     return (
-      <div
-        onClick={() => {
-          toggleInfoShow(modul.id);
-        }}
-        className="container"
-      >
-        <div className="row border-top  border-secondary">
-          <div className="col mb-2">{modul.brand}</div>
-          <div className="col m-2">{modul.model}</div>
-          <div className="col m-2">{modul.price}</div>
-        </div>
+      <>
+        <tr
+          onClick={() => {
+            toggleInfoShow(modul.id);
+          }}
+          className="container"
+        >
+          <td className="col mb-2">{modul.brand}</td>
+          <td className="col m-2">{modul.model}</td>
+          <td className="col m-2">{modul.price}</td>
+        </tr>
         {moreInfo[modul.id] ? (
-          <p class="card">
-            <div className="card-body">
+          <tr>
+            <td colspan="3">
               <h5 className="card-title">{modul.brand}</h5>
               <h6 className="card-subtitle mb-2 text-muted">{modul.model}</h6>
               <p className="card-text">{modul.description}</p>
@@ -118,100 +35,25 @@ const DatabaseModuls = () => {
               <p className="card-text">wysokośc : {modul.height}</p>
               <p className="card-text">szerokość : {modul.width}</p>
               <p className="card-text">gwarancja : {modul.warranty}</p>
-            </div>
-          </p>
+            </td>
+          </tr>
         ) : null}
-      </div>
+      </>
     );
   });
+
   return (
-    <div>
-      <div className="row">
-        <div className="col m-2 fw-bold">MARKA</div>
-        <div className="col m-2 fw-bold">MODEL</div>
-        <div className="col m-2 fw-bold">CENA</div>
-        {modulsList}
-      </div>
-      <form onSubmit={addNewModule}>
-        <FormInput
-          type="text"
-          label="wpisz nazwe modułu"
-          name="brand"
-          value={brand}
-          onChange={handleChange}
-          required
-        ></FormInput>
-        <FormInput
-          type="text"
-          label="dane"
-          name="datasheet"
-          value={datasheet}
-          onChange={handleChange}
-        ></FormInput>
-        <FormInput
-          type="text"
-          label="opis"
-          name="description"
-          value={description}
-          onChange={handleChange}
-        ></FormInput>
-        <FormInput
-          type="text"
-          label="nazwa modelu"
-          name="model"
-          value={model}
-          onChange={handleChange}
-          required
-        ></FormInput>
-        <FormInput
-          type="number"
-          label="wysokość"
-          name="height"
-          value={height}
-          onChange={handleChange}
-        ></FormInput>
-        <FormInput
-          type="number"
-          label="szerokość"
-          name="width"
-          value={width}
-          onChange={handleChange}
-        ></FormInput>
-        <FormInput
-          type="number"
-          label="moc"
-          name="power"
-          value={power}
-          onChange={handleChange}
-          required
-        ></FormInput>
-        <FormInput
-          type="number"
-          label="gwaranca na moc ?"
-          name="powerWarranty"
-          value={powerWarranty}
-          onChange={handleChange}
-        ></FormInput>
-        <FormInput
-          type="number"
-          label="gwarancja na moduł"
-          name="warranty"
-          value={warranty}
-          onChange={handleChange}
-        ></FormInput>
-        <FormInput
-          type="number"
-          label="Cena"
-          name="price"
-          value={price}
-          onChange={handleChange}
-          required
-        ></FormInput>
-        <button className="btn btn-success mb-3" type="submit">
-          dodaj Moduł
-        </button>
-      </form>
-    </div>
+    <>
+      <AddToFirestore collection="moduls" />
+      <table class="table table-striped table-hover">
+        <thead>
+          <th scope="col">MARKA</th>
+          <th scope="col">MODEL</th>
+          <th scope="col">CENA</th>
+        </thead>
+        <tbody>{modulsList}</tbody>
+      </table>
+    </>
   );
 };
 

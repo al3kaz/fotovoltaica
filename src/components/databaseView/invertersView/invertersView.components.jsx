@@ -1,5 +1,6 @@
 import React from 'react';
 import useFirestoreData from '../../../hooks/useFirestoreData';
+import AddToFirestore from '../../../CSVToFirestore/AddToFirestore';
 
 const DatabaseModuls = () => {
   const [moreInfo, setMoreInfo] = React.useState({});
@@ -23,20 +24,20 @@ const DatabaseModuls = () => {
 
   const invertersList = inverters.sort(sortinvertes).map((inverter) => {
     return (
-      <div
-        onClick={() => {
-          toggleInfoShow(inverter.id);
-        }}
-        className="container"
-      >
-        <div className="row border-top  border-secondary">
-          <div className="col m-2">{inverter.brand}</div>
-          <div className="col m-2">{inverter.model}</div>
-          <div className="col m-2">{(1 * inverter.price).toFixed(2)}</div>
-        </div>
+      <>
+        <tr
+          onClick={() => {
+            toggleInfoShow(inverter.id);
+          }}
+          className="container"
+        >
+          <td className="col mb-2">{inverter.brand}</td>
+          <td className="col m-2">{inverter.model}</td>
+          <td className="col m-2">{inverter.price}</td>
+        </tr>
         {moreInfo[inverter.id] ? (
-          <p class="card">
-            <div className="card-body">
+          <tr>
+            <td colspan="3">
               <h5 className="card-title">{inverter.brand}</h5>
               <h6 className="card-subtitle mx-2 text-muted">
                 {inverter.model}
@@ -45,22 +46,25 @@ const DatabaseModuls = () => {
               <p className="card-text">moc AC : {inverter.ACpower}</p>
               <p className="card-text">moc DC : {inverter.maxDC}</p>
               <p className="card-text">gwarancja : {inverter.warranty}</p>
-            </div>
-          </p>
+            </td>
+          </tr>
         ) : null}
-      </div>
+      </>
     );
   });
 
   return (
-    <div>
-      <div className="row">
-        <div className="col m-2 fw-bold">MARKA</div>
-        <div className="col m-2 fw-bold">MODEL</div>
-        <div className="col m-2 fw-bold">CENA</div>
-        {invertersList}
-      </div>
-    </div>
+    <>
+      <AddToFirestore collection="inverters2" />
+      <table class="table table-striped table-hover">
+        <thead>
+          <th scope="col">MARKA</th>
+          <th scope="col">MODEL</th>
+          <th scope="col">CENA</th>
+        </thead>
+        <tbody>{invertersList}</tbody>
+      </table>
+    </>
   );
 };
 
