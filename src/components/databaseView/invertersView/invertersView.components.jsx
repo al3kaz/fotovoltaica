@@ -55,7 +55,7 @@ const DatabaseModuls = () => {
 
   return (
     <>
-      <AddToFirestore collection="inverters2" />
+      <AddToFirestore collection="inverters" />
       <table class="table table-striped table-hover">
         <thead>
           <th scope="col">MARKA</th>
