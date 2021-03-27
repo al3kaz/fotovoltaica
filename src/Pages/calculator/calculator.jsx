@@ -24,7 +24,7 @@ const Calculator = () => {
     moduleIndex: 0,
     modulePower: 0,
     clientInfo: 0,
-    phase: '3',
+    phase: 3,
     inverterProducent: '',
     correctInverterModelId: '',
     typeOfRoof: 0,
@@ -32,7 +32,6 @@ const Calculator = () => {
     margins: 0,
     moduleCount: 0,
   });
-
   React.useEffect(() => {
     if (moduls.length === 0) return;
     setModuleCount(
@@ -110,14 +109,14 @@ const Calculator = () => {
   const selectedInverter = inverters.filter(
     (item) => item.id === state.correctInverterModelId
   );
-  const selectedInverterPrice = (
-    1 * selectedInverter.map((item) => item.price)
-  ).toFixed(2);
+
+  const selectedInverterPrice = selectedInverter.map((item) => item.price);
+
   const selectedInverterModel = selectedInverter.map((item) => item.model);
 
   const totalNetPrice =
     state.moduleCount * modulePrice() +
-    1 * selectedInverterPrice +
+    parseInt(selectedInverterPrice[0]) +
     state.moduleCount * state.typeOfRoof +
     truePower * installationPrice() /*koszty AC/DC tutaj*/ +
     protectionCount();
@@ -131,9 +130,8 @@ const Calculator = () => {
   const totalGrosPrice = (totalNetPriceWithMargins * state.clientInfo).toFixed(
     2
   );
-
   const vat = () => {
-    if (totalGrosPrice == 0) return null;
+    if (totalGrosPrice === 0) return null;
     else return (totalGrosPrice - totalNetPriceWithMargins).toFixed(2);
   };
 

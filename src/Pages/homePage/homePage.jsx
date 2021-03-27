@@ -28,7 +28,6 @@ const HomePage = () => {
   }, []);
 
   const onChange = (notes) => {
-    console.log('zmiana');
     setNotes(notes);
   };
 

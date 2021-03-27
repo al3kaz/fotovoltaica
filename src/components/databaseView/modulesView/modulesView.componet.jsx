@@ -45,7 +45,7 @@ const DatabaseModuls = () => {
   return (
     <>
       <AddToFirestore collection="moduls" />
-      <table class="table table-striped table-hover">
+      <table className="table table-striped table-hover">
         <thead>
           <th scope="col">MARKA</th>
           <th scope="col">MODEL</th>
