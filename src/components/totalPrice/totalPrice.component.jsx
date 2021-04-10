@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 const TotalPrice = ({
   totalNetPriceWithMargins,
@@ -7,9 +7,9 @@ const TotalPrice = ({
   setMargins,
 }) => {
   return (
-    <div className="d-flex flex-column bd-highlight m-3 ">
-      <div>
-        <label className="pe-2">Marża</label>
+    <div className="mx-auto d-flex flex-column bd-highlight m-3">
+      <div className="mx-auto d-flex m-2 ">
+        <label className="mx-auto pe-2">Marża</label>
         <input
           type="number"
           onChange={(e) => {
@@ -19,10 +19,10 @@ const TotalPrice = ({
       </div>
       <p>
         cena netto :{' '}
-        {isNaN(totalNetPriceWithMargins) ? '' : totalNetPriceWithMargins}
+        {isNaN(totalNetPriceWithMargins) ? 'brak danych' : totalNetPriceWithMargins}
       </p>
-      <p>VAT : {isNaN(vat) ? '' : vat}</p>
-      <p>cena brutton : {isNaN(totalGrosPrice) ? '' : totalGrosPrice}</p>
+      <p>VAT : {isNaN(vat) ? 'brak danych' : vat}</p>
+      <p>cena brutto : {isNaN(totalGrosPrice) ? 'brak danych' : totalGrosPrice}</p>
     </div>
   );
 };

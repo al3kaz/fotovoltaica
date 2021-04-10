@@ -66,7 +66,7 @@ const HomePage = () => {
       <Navigation />
       <div className="flex d-flex flex-column align-items-center">
         <button className="btn btn-dark btn-sm " onClick={addNotesToFirebase}>
-          dodaj notki
+          dodaj notatki
         </button>
       </div>
       <ReactStickies

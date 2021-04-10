@@ -1,13 +1,20 @@
+import { Autocomplete } from '@material-ui/lab';
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { auth } from '../../firebase';
+import logo from '../../image/unnamed_(3).png'
+
 
 const Navigation = () => {
   return (
     <div className="sticky-top m-3">
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div width='100%' className='d-flex justify-content-center bg-light'>
+      <img src={logo} width='160px' className='p-3'/>
+      <span className='p-3'>{auth.currentUser.email}</span>
+      </div>
+      <nav className="navbar nav-tabs navbar-expand-lg navbar-light bg-light ">
         <div className="container-fluid justify-content-center">
-          <ul className="nav nav-tabs justify-content-center">
+          <ul className="nav  justify-content-center">
             <li className="nav-item">
               <NavLink className="nav-link" exact to="/">
                 Start

@@ -49,11 +49,11 @@ const Inverter = ({
     });
 
   return (
-    <div className="d-flex flex-column bd-highlight m-3">
+    <div className="mx-auto d-flex flex-column bd-highlight m-3">
       {truePower <= 3.6 ? (
-        <span className="m-1">
+        <span className="mx-auto m-1">
           <input
-            type="radio"
+            type="checkbox"
             id="one"
             name="one"
             onClick={(e) => {
@@ -63,13 +63,13 @@ const Inverter = ({
               } else setPhase(1);
             }}
           />
-          <label for="one" className="ps-2">
+          <label for="one" className="mx-auto ps-2">
             1-fazowy
           </label>
         </span>
       ) : null}
-      <div className="m-2">
-        <label className="pe-2">Producent falownika</label>
+      <div className="mx-auto m-2">
+        <label className="mx-auto pe-2">Producent falownika</label>
         <select
           onChange={(e) => {
             setInverterProducent(e.target.value);
@@ -81,14 +81,14 @@ const Inverter = ({
           </optgroup>
         </select>
       </div>
-      <div className="m-2">
-        <label className="pe-2">Model falownika</label>
+      <div className="mx-auto m-2">
+        <label className="mx-auto pe-2">Model falownika</label>
         <select
           onChange={(e) => {
             setCorrectInverterModelId(e.target.value);
           }}
         >
-          <optgroup label="moduły do wyboru">
+          <optgroup label="falowniki do wyboru">
             <option value="" selected disabled hidden />
             {inverterModels}
           </optgroup>

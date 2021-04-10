@@ -52,7 +52,7 @@ const Modules = ({
         <select onChange={(e) => priceDependingOnRoof(e.target.value)}>
           <optgroup label="rodzaj dachu">
             <option value="" selected disabled hidden />
-            <option value="flat">dach prosty</option>
+            <option value="flat">dach płaski</option>
             <option value="slant">dach skośny</option>
             <option value="ground">grunt</option>
           </optgroup>

@@ -8,6 +8,7 @@ import { useInverters } from '../providers/invertersProvider';
 import { useConstructions } from '../providers/constructionsProvider';
 import { useInstallation } from '../providers/installationProvider';
 import { useProtection } from '../providers/protectionProvider';
+import { useSettings } from '../providers/settingsProvider';
 
 const db = firebase.firestore();
 
@@ -17,6 +18,7 @@ const useFirestoreData = () => {
   const [constructions, setConstructions] = useConstructions();
   const [installation, setInstallation] = useInstallation();
   const [protection, setProtection] = useProtection();
+  const [settings, setSettings] = useSettings();
 
   React.useEffect(() => {
     if (moduls.length !== 0) return;
@@ -25,6 +27,7 @@ const useFirestoreData = () => {
     const constructionsRef = db.collection('constructions');
     const installationRef = db.collection('installation');
     const protectionRef = db.collection('protection');
+    const settingsRef = db.collection('settings');
 
     modulesRef.get().then((snapshot) => {
       const data = snapshot.docs.map((doc) => ({
@@ -61,8 +64,15 @@ const useFirestoreData = () => {
       }));
       setProtection(data);
     });
+    settingsRef.get().then((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSettings(data);
+    });
   }, []);
 
-  return { moduls, inverters, constructions, installation, protection };
+  return { moduls, inverters, constructions, installation, protection, settings };
 };
 export default useFirestoreData;

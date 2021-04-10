@@ -17,6 +17,7 @@ const Calculator = () => {
     constructions,
     installation,
     protection,
+    settings
   } = useFirestoreData();
 
   const [state, dispatch] = React.useReducer(reducer, {
@@ -39,7 +40,8 @@ const Calculator = () => {
     );
   }, [state.requestedPower, state.modulePower, moduls.length]);
 
-  if (moduls.length === 0) return <Spinner />;
+  if (moduls.length === 0 && settings.length === 0) return <Spinner />;
+  
 
   //////////////////////reducer functions
   const setRequestedPower = (requestedPower) =>
@@ -114,13 +116,16 @@ const Calculator = () => {
 
   const selectedInverterModel = selectedInverter.map((item) => item.model);
 
+  const constMargin = settings[0].constmargin;
+
   const totalNetPrice =
-    state.moduleCount * modulePrice() +
+    (state.moduleCount * modulePrice() +
     parseInt(selectedInverterPrice[0]) +
     state.moduleCount * state.typeOfRoof +
     truePower * installationPrice() /*koszty AC/DC tutaj*/ +
-    protectionCount();
+    protectionCount())*(1+constMargin);
   /*narzut na koszty stałe*/
+  console.log(typeof settings[0].constmargin)
 
   const totalNetPriceWithMargins = (
     (state.margins / 100) * totalNetPrice +
@@ -138,19 +143,18 @@ const Calculator = () => {
   return (
     <div
       data-test="component-calculator"
-      className="d-flex flex-column justify-content-between"
+      className="mx-auto d-flex flex-column justify-content-center"
     >
       <Navigation />
-      <div className="d-flex flex-column bd-highlight m-3 ">
-        <div className="m-2">
-          <label className="pe-2">Żądana moc</label>
+      <div className="mx-auto d-flex flex-column bd-highlight m-3 justify-content-center">
+        <div className="mx-auto m-2 ">
+          <label className="mx-auto pe-2">Żądana moc (kWp)</label>
           <input
             type="number"
             onChange={(e) => {
               setRequestedPower(1 * e.target.value);
             }}
           />
-          <label>kWp</label>
         </div>
         <Modules
           moduls={moduls}
@@ -159,31 +163,34 @@ const Calculator = () => {
           setTypeOfRoof={setTypeOfRoof}
           setModuleIndex={setModuleIndex}
         />
-        <div className="m-2">
-          <p className="fw-bold">
-            moc : {isNaN(truePower) ? '' : truePower} kWp
+        <div className="mx-auto m-2">
+          <p className="mx-auto fw-bold">
+            moc : {isNaN(truePower) ? '0' : truePower} kWp
           </p>
-          <label className="pe-2">liczba modułów</label>
+          <label className="mx-auto pe-2">liczba modułów</label>
+          
+          <input type="number" value={state.moduleCount} />
+          <div className='d-flex justify-content-center'>
           <button
-            className="btn btn-light btn-sm mx-1"
+            className="btn btn-light btn-sm mx-1 border border-warning"
             onClick={() => {
               setModuleCount(state.moduleCount - 1);
             }}
           >
             -
           </button>
-          <input type="number" value={state.moduleCount} />
           <button
-            className="btn btn-light btn-sm mx-1"
+            className="btn btn-light btn-sm mx-1 border border-warning"
             onClick={() => {
               setModuleCount(state.moduleCount + 1);
             }}
           >
             +
           </button>
+          </div>
         </div>
-        <div className="m-2">
-          <label className="pe-2">podatek</label>
+        <div className="mx-auto m-2">
+          <label className="mx-auto pe-2">podatek</label>
           <select onChange={(e) => setClientInfo(1 * e.target.value)}>
             <optgroup label="podatek">
               <option value="" selected disabled hidden />

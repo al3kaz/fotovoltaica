@@ -12,6 +12,7 @@ import Offers from './Pages/offers/offers';
 import Database from './Pages/database/database';
 import Spinner from './components/spinner/spinner';
 import { UserContext } from './providers/UserProvider';
+import { SettingsProvider } from './providers/settingsProvider';
 
 const App = () => {
   const user = useContext(UserContext);
@@ -26,10 +27,12 @@ const App = () => {
             <ConstructionsProvider>
               <InstallationProvider>
                 <ProtectionProvider>
-                  <Route exact path="/" component={HomePage} />
-                  <Route path="/calculator" component={Calculator} />
-                  <Route path="/Offers" component={Offers} />
-                  <Route path="/database" component={Database} />
+                  <SettingsProvider>
+                    <Route exact path="/" component={HomePage} />
+                    <Route path="/calculator" component={Calculator} />
+                    <Route path="/Offers" component={Offers} />
+                    <Route path="/database" component={Database} />
+                  </SettingsProvider>
                 </ProtectionProvider>
               </InstallationProvider>
             </ConstructionsProvider>
