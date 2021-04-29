@@ -1,10 +1,20 @@
 import React from 'react';
 import useFirestoreData from '../../../hooks/useFirestoreData';
-import AddToFirestore from '../../../CSVToFirestore/AddToFirestore';
 
 const DatabaseModuls = () => {
   const [moreInfo, setMoreInfo] = React.useState({});
   const { moduls } = useFirestoreData();
+
+  function sortmodules(a, b) {
+    if (a.power < b.power) {
+      return -1;
+    }
+    if (a.power > b.power) {
+      return 1;
+    }
+    return 0;
+
+  }
 
   const toggleInfoShow = (id) => {
     setMoreInfo((prevMoreInfo) => ({
@@ -12,10 +22,10 @@ const DatabaseModuls = () => {
     }));
   };
 
-  const modulsList = moduls.map((modul) => {
+  const modulsList = moduls.sort(sortmodules).map((modul) => {
     return (
       <>
-        <tr
+      <tr
           onClick={() => {
             toggleInfoShow(modul.id);
           }}
@@ -23,7 +33,7 @@ const DatabaseModuls = () => {
         >
           <td className="col mb-2">{modul.brand}</td>
           <td className="col m-2">{modul.model}</td>
-          <td className="col m-2">{modul.price}</td>
+          <td className="col m-2">{modul.power}</td>
         </tr>
         {moreInfo[modul.id] ? (
           <tr>
@@ -44,13 +54,12 @@ const DatabaseModuls = () => {
 
   return (
     <>
-      <AddToFirestore collection="moduls" />
       <table className="table table-striped table-hover">
         <thead>
           <tr>
           <th scope="col">MARKA</th>
           <th scope="col">MODEL</th>
-          <th scope="col">CENA</th>
+          <th scope="col">MOC</th>
           </tr>
         </thead>
         <tbody>{modulsList}</tbody>

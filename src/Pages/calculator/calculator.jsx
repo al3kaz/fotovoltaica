@@ -8,6 +8,7 @@ import {
   TotalPrice,
   Spinner,
   NewClientForm,
+  Opti,
 } from './index';
 
 const Calculator = () => {
@@ -17,11 +18,14 @@ const Calculator = () => {
     constructions,
     installation,
     protection,
-    settings
+    settings,
+    opti
   } = useFirestoreData();
+  
+// console.log(state.moduleIndex)
 
   const [state, dispatch] = React.useReducer(reducer, {
-    requestedPower: 0,
+    requestedPower: 10,
     moduleIndex: 0,
     modulePower: 0,
     clientInfo: 0,
@@ -32,15 +36,21 @@ const Calculator = () => {
     intallationPrice: 0,
     margins: 0,
     moduleCount: 0,
+    optiIndex: 0,
+    optiCount: 0,
+    optiCheck: false
   });
+
+console.log(state.moduleIndex)
+
   React.useEffect(() => {
-    if (moduls.length === 0) return;
+    if (moduls.length === 0 || settings.length === 0 || opti.length === 0) return;
     setModuleCount(
       Math.floor((state.requestedPower * 1000) / state.modulePower)
     );
-  }, [state.requestedPower, state.modulePower, moduls.length]);
+  }, [state.requestedPower, state.modulePower, moduls.length, settings.length]);
 
-  if (moduls.length === 0 && settings.length === 0) return <Spinner />;
+  if (moduls.length === 0 || settings.length === 0 || opti.length === 0) return <Spinner />;
   
 
   //////////////////////reducer functions
@@ -58,8 +68,9 @@ const Calculator = () => {
 
   const setPhase = (phase) => dispatch({ type: 'setPhase', payload: phase });
 
-  const setInverterProducent = (inverterProducent) =>
+  const setInverterProducent = (inverterProducent) => {
     dispatch({ type: 'setInverterProducent', payload: inverterProducent });
+  }
 
   const setCorrectInverterModelId = (correctInverterModelId) =>
     dispatch({
@@ -75,10 +86,27 @@ const Calculator = () => {
 
   const setMargins = (margins) =>
     dispatch({ type: 'setMargins', payload: margins });
+  
+  const setOptiIndex = (optiIndex) =>
+    dispatch({ type: 'setOptiIndex', payload: optiIndex });
+  
+  const setOptiCount = (optiCount) =>
+    dispatch({ type: 'setOptiCount', payload: optiCount });
+  
+  const setOptiCheck = (optiCheck) =>
+    dispatch({ type: 'setOptiCheck', payload: optiCheck });
   ///////////////////////////////// end
+
+  // React.useEffect(() => {
+
+  // }, [])
 
   const modulePrice = () => {
     if (state.moduleIndex >= 0) return moduls[state.moduleIndex].price;
+  };
+  
+  const optiPrice = () => {
+    if (state.optiIndex >= 0) return opti[state.optiIndex].price;
   };
 
   const truePower = (state.moduleCount * state.modulePower) / 1000;
@@ -114,36 +142,45 @@ const Calculator = () => {
 
   const selectedInverterPrice = selectedInverter.map((item) => item.price);
 
-  const selectedInverterModel = selectedInverter.map((item) => item.model);
+  // const selectedInverterModel = selectedInverter.map((item) => item.model);
 
-  const constMargin = settings[0].constmargin;
+  const constMargin = 1* settings.constmargin;
+
+  // const minMargin = 12
+  const minMargin = 1* settings.minmargin
+  
 
   const totalNetPrice =
     (state.moduleCount * modulePrice() +
-    parseInt(selectedInverterPrice[0]) +
+    parseFloat(selectedInverterPrice[0]) +
     state.moduleCount * state.typeOfRoof +
-    truePower * installationPrice() /*koszty AC/DC tutaj*/ +
-    protectionCount())*(1+constMargin);
-  /*narzut na koszty stałe*/
-  console.log(typeof settings[0].constmargin)
+    truePower * installationPrice() +
+    protectionCount() +
+    state.optiCount * optiPrice())*(1+constMargin);
+  
+  // console.log(settings[0].constmargin)
+  // console.log(settings[0].minmargin)
 
   const totalNetPriceWithMargins = (
     (state.margins / 100) * totalNetPrice +
     totalNetPrice
   ).toFixed(2);
 
-  const totalGrosPrice = (totalNetPriceWithMargins * state.clientInfo).toFixed(
-    2
-  );
+  const totalGrosPrice = (totalNetPriceWithMargins * state.clientInfo).toFixed(2);
   const vat = () => {
     if (totalGrosPrice === 0) return null;
     else return (totalGrosPrice - totalNetPriceWithMargins).toFixed(2);
   };
 
+  console.log('protection '+protectionCount())
+  console.log('inverter price '+ selectedInverterPrice)
+  console.log('module price '+ modulePrice())
+  console.log('margin z profile ')
+
   return (
     <div
       data-test="component-calculator"
-      className="mx-auto d-flex flex-column justify-content-center"
+      className="mx-auto d-flex flex-column justify-content-center text-end"
     >
       <Navigation />
       <div className="mx-auto d-flex flex-column bd-highlight m-3 justify-content-center">
@@ -151,7 +188,8 @@ const Calculator = () => {
           <label className="mx-auto pe-2">Żądana moc (kWp)</label>
           <input
             type="number"
-            onChange={(e) => {
+            value={state.requestedPower!=0 ? state.requestedPower : ''}
+            onChange={(e) => {e.target.value>50 ? setRequestedPower(50) :
               setRequestedPower(1 * e.target.value);
             }}
           />
@@ -164,28 +202,34 @@ const Calculator = () => {
           setModuleIndex={setModuleIndex}
         />
         <div className="mx-auto m-2">
-          <p className="mx-auto fw-bold">
-            moc : {isNaN(truePower) ? '0' : truePower} kWp
-          </p>
+          <table className="mx-auto fw-bold mb-2">
+            <tr>
+              <td className='text-end pe-2'>
+                moc:
+              </td>
+              <td className='text-start'>
+                {isNaN(truePower) ? '0' : truePower} kWp
+              </td>
+            </tr>
+          </table>
           <label className="mx-auto pe-2">liczba modułów</label>
-          
-          <input type="number" value={state.moduleCount} />
+          <input type="number" value={state.moduleCount} className='mb-2' readOnly/>
           <div className='d-flex justify-content-center'>
           <button
-            className="btn btn-light btn-sm mx-1 border border-warning"
+            className="btn btn-outline-warning mx-2 fw-bold"
             onClick={() => {
-              setModuleCount(state.moduleCount - 1);
+              state.moduleCount>0 ? setModuleCount(state.moduleCount - 1) : setModuleCount(0);
             }}
           >
-            -
+            odejmij
           </button>
           <button
-            className="btn btn-light btn-sm mx-1 border border-warning"
+            className="btn btn-outline-warning mx-2 fw-bold"
             onClick={() => {
               setModuleCount(state.moduleCount + 1);
             }}
           >
-            +
+            dodaj
           </button>
           </div>
         </div>
@@ -209,13 +253,30 @@ const Calculator = () => {
         setInverterProducent={setInverterProducent}
         setCorrectInverterModelId={setCorrectInverterModelId}
       />
+      
+      <Opti
+        opti = {opti}
+        optiCheck = {state.optiCheck}
+        optiIndex = {state.optiIndex}
+        optiCount = {state.optiCount}
+        setOptiCheck = {setOptiCheck}
+        setOptiCount = {setOptiCount}
+        setOptiIndex = {setOptiIndex}
+        moduleCount = {state.moduleCount}
+        inverterProducent = {state.inverterProducent}
+      />
       <TotalPrice
         totalNetPriceWithMargins={totalNetPriceWithMargins}
         totalGrosPrice={totalGrosPrice}
         vat={vat()}
         setMargins={setMargins}
+        margins={state.margins}
+        minMargin = {minMargin}
       />
-      <NewClientForm
+      {/* <Commission 
+        totalNetPrice={totalNetPrice}
+      /> */}
+      {/* <NewClientForm
         power={JSON.stringify(truePower)}
         installationType={JSON.stringify(state.typeOfRoof)}
         phase={state.phase}
@@ -226,7 +287,7 @@ const Calculator = () => {
         grosPrice={totalGrosPrice}
         vat={vat()}
         interestVat={JSON.stringify(Math.round((state.clientInfo - 1) * 100))}
-      />
+      /> */}
     </div>
   );
 };

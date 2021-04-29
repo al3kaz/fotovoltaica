@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SettingsContext = React.createContext();
+export const SettingsContext = React.createContext();
 
 function useSettings() {
   const context = React.useContext(SettingsContext);

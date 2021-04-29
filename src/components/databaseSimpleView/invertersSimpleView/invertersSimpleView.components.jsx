@@ -1,6 +1,5 @@
 import React from 'react';
 import useFirestoreData from '../../../hooks/useFirestoreData';
-import AddToFirestore from '../../../CSVToFirestore/AddToFirestore';
 
 const DatabaseModuls = () => {
   const [moreInfo, setMoreInfo] = React.useState({});
@@ -13,7 +12,14 @@ const DatabaseModuls = () => {
     if (a.brand > b.brand) {
       return 1;
     }
+    if (a.acpower < b.acpower) {
+      return -1;
+    }
+    if (a.acpower > b.acpower) {
+      return 1;
+    }
     return 0;
+
   }
 
   const toggleInfoShow = (id) => {
@@ -33,7 +39,7 @@ const DatabaseModuls = () => {
         >
           <td className="col mb-2">{inverter.brand}</td>
           <td className="col m-2">{inverter.model}</td>
-          <td className="col m-2">{inverter.price}</td>
+          <td className="col m-2">{inverter.acpower/1000} kW</td>
         </tr>
         {moreInfo[inverter.id] ? (
           <tr>
@@ -44,7 +50,7 @@ const DatabaseModuls = () => {
               </h6>
               <p className="card-text">{inverter.description}</p>
               <p className="card-text">moc AC : {inverter.acpower}</p>
-              <p className="card-text">moc DC : {inverter.maxdc}</p>
+              <p className="card-text">max DC : {inverter.maxdc}</p>
               <p className="card-text">gwarancja : {inverter.warranty}</p>
             </td>
           </tr>
@@ -55,13 +61,12 @@ const DatabaseModuls = () => {
 
   return (
     <>
-      <AddToFirestore collection="inverters" />
       <table class="table table-striped table-hover">
         <thead>
           <tr>
           <th scope="col">MARKA</th>
           <th scope="col">MODEL</th>
-          <th scope="col">CENA</th>
+          <th scope="col">MOC AC</th>
           </tr>
         </thead>
         <tbody>{invertersList}</tbody>

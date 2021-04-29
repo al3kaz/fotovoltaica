@@ -7,6 +7,7 @@ const Modules = ({
   setTypeOfRoof,
   setModuleIndex,
 }) => {
+  
   function sortModules(a, b) {
     if (a.brand < b.brand) {
       return -1;
@@ -18,7 +19,7 @@ const Modules = ({
   }
   const showModule = moduls.sort(sortModules).map((item) => {
     return (
-      <option key={item.id} value={item.power} price={item.price}>
+      <option key={item.id} value={item.power} >
         {item.brand} "{item.model}"
       </option>
     );
@@ -37,8 +38,9 @@ const Modules = ({
         <label className="pe-2">moduł</label>
         <select
           onChange={(e) => {
-            setModuleIndex(e.target.selectedIndex - 1);
+            setModuleIndex(e.target.selectedIndex);
             setModulePower(e.target.value);
+            localStorage.setItem('moduleIndex', e.target.selectedIndex -1)
           }}
         >
           <optgroup label="moduły do wyboru">

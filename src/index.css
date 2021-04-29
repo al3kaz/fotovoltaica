@@ -9,13 +9,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-input, select, label{
-  width: 200px;
+input, select, label, td{
+  width: 25vw;
+  max-width: 200px;
 }
 
-label{
-  text-align: right;
-}
-p {
-  text-align: center;
+#userEmail, #userPassword {
+  width: 100%;
+  max-width: 100%;
 }

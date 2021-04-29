@@ -28,6 +28,8 @@ export const generateUserDocument = async (user, additionalData) => {
         displayName,
         email,
         photoURL,
+        admin: false,
+        division: 'def',
         ...additionalData,
       });
     } catch (error) {

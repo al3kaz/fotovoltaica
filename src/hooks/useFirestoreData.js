@@ -9,6 +9,7 @@ import { useConstructions } from '../providers/constructionsProvider';
 import { useInstallation } from '../providers/installationProvider';
 import { useProtection } from '../providers/protectionProvider';
 import { useSettings } from '../providers/settingsProvider';
+import { useOpti } from '../providers/optiProvider';
 
 const db = firebase.firestore();
 
@@ -19,6 +20,7 @@ const useFirestoreData = () => {
   const [installation, setInstallation] = useInstallation();
   const [protection, setProtection] = useProtection();
   const [settings, setSettings] = useSettings();
+  const [opti, setOpti] = useOpti();
 
   React.useEffect(() => {
     if (moduls.length !== 0) return;
@@ -27,7 +29,8 @@ const useFirestoreData = () => {
     const constructionsRef = db.collection('constructions');
     const installationRef = db.collection('installation');
     const protectionRef = db.collection('protection');
-    const settingsRef = db.collection('settings');
+    const settingsRef = db.collection('settings').doc('settings');
+    const optiRef = db.collection('opti');
 
     modulesRef.get().then((snapshot) => {
       const data = snapshot.docs.map((doc) => ({
@@ -65,14 +68,23 @@ const useFirestoreData = () => {
       setProtection(data);
     });
     settingsRef.get().then((snapshot) => {
+      const data = snapshot.data();
+      // const data = snapshot.data.map((doc) => ({
+      //   id: doc.id,
+      //   ...doc.data(),
+      // }));
+      console.log(data);
+      setSettings(data);
+    });
+    optiRef.get().then((snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setSettings(data);
+      setOpti(data);
     });
   }, []);
 
-  return { moduls, inverters, constructions, installation, protection, settings };
+  return { moduls, inverters, constructions, installation, protection, settings, opti };
 };
 export default useFirestoreData;

@@ -3,8 +3,8 @@ import React from 'react';
 const Inverter = ({
   inverters,
   truePower,
-  phase,
-  setPhase,
+  // phase,
+  // setPhase,
   inverterProducent,
   setInverterProducent,
   setCorrectInverterModelId,
@@ -36,21 +36,21 @@ const Inverter = ({
     .filter(
       (model) =>
         model.brand === inverterProducent &&
-        model.phase === phase &&
+        // model.phase === phase &&
         model.maxdc / 1000 >= truePower
     )
     .sort(sortInvertes)
     .map((item) => {
       return (
         <option key={item.id} value={item.id}>
-          '{item.model}' AC:'{item.acpower / 1000}' DC'{item.maxdc / 1000}
+          {item.phase == 1 ? '1-faz | ' : ''} {item.model} | AC:{item.acpower / 1000} kW | max DC:{item.maxdc / 1000} kW
         </option>
       );
     });
-
+  
   return (
     <div className="mx-auto d-flex flex-column bd-highlight m-3">
-      {truePower <= 3.6 ? (
+      {/* {truePower <= 3.6 ? (
         <span className="mx-auto m-1">
           <input
             type="checkbox"
@@ -67,10 +67,10 @@ const Inverter = ({
             1-fazowy
           </label>
         </span>
-      ) : null}
+      ) : null} */}
       <div className="mx-auto m-2">
         <label className="mx-auto pe-2">Producent falownika</label>
-        <select
+        <select          
           onChange={(e) => {
             setInverterProducent(e.target.value);
           }}
@@ -88,6 +88,7 @@ const Inverter = ({
             setCorrectInverterModelId(e.target.value);
           }}
         >
+        
           <optgroup label="falowniki do wyboru">
             <option value="" selected disabled hidden />
             {inverterModels}

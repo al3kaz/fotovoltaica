@@ -20,6 +20,12 @@ export function reducer(state, action) {
       return { ...state, margins: action.payload };
     case 'setModuleCount':
       return { ...state, moduleCount: action.payload };
+    case 'setOptiCount':
+      return { ...state, optiCount: action.payload };
+    case 'setOptiCheck':
+      return { ...state, optiCheck: action.payload };
+    case 'setOptiIndex':
+      return { ...state, optiIndex: action.payload };
     default:
       throw new Error(`invalid aciotn type: ${action.type}`);
   }
